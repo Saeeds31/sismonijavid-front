@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  css: ["~/assets/css/main.css", "~/assets/css/fonts.css"],
+  css: ["~/assets/css/main.css", "~/assets/css/fonts.css","~/assets/css/theme.css"],
 
   app: {
     head: {

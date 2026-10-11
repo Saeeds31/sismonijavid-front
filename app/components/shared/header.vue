@@ -1,140 +1,144 @@
-<!-- app/components/shared/header.vue -->
 <template>
   <header class="mb-4">
-    <headerTopBar />
+    <!-- ==================== دسکتاپ ==================== -->
     <div class="hidden md:block">
-      <div class="container w-full flex justify-between py-4">
-        <div class="flex items-center gap-5">
-          <SharedLogo :width="'100px'" height="'67px'" />
+      <!-- ردیف بالا: لوگو + منوها -->
+      <div class="jb-header relative z-[50]">
+        <div class="container w-full flex items-center justify-between py-1">
+          <!-- لوگو -->
+          <SharedLogo :width="'110px'" height="'74px'" />
+
+          <!-- منوها -->
+          <HeaderMenu class="flex-1 mr-8" />
+        </div>
+      </div>
+
+      <!-- ردیف پایین: شبکه‌های اجتماعی | سرچ | پروفایل + سبد -->
+      <div class="container py-4 flex items-center justify-between gap-6">
+        <!-- راست: شبکه‌های اجتماعی -->
+        <div class="flex items-center gap-1 shrink-0">
+          <a
+            v-for="item in socialLinks"
+            :key="item.label"
+            :href="item.href"
+            target="_blank"
+            rel="noopener"
+            :title="item.label"
+            class="jb-icon-btn w-9 h-9"
+          >
+            <img :src="item.icon" :alt="item.label" class="w-5 h-5" />
+          </a>
+        </div>
+
+        <!-- وسط: سرچ (بدون دسته‌بندی) -->
+        <div class="flex-1 max-w-2xl">
           <HeaderSearch />
         </div>
 
-        <div class="flex items-center gap-2">
+        <!-- چپ: پروفایل + سبد خرید -->
+        <div class="flex items-center gap-2 shrink-0">
           <HeaderBtnProfile />
-
-          <button type="button"
-            class="relative flex items-center gap-2 rounded-xl border p-1 border-gray-300  bg-secondary"
-            @click="openCartSidebar">
-            <span class="text-white">سبد خرید</span>
-            <img src="/icons/bag.svg" class="" />
-            <span v-if="cartItemsCount > 0" class="cart-badge">
+          <button
+            type="button"
+            class="relative jb-btn-secondary flex items-center gap-2 !py-2 !px-4"
+            @click="openCartSidebar"
+          >
+            <span class="font-bold text-sm">سبد خرید</span>
+            <img src="/icons/bag.svg" class="w-5 h-5" />
+            <span v-if="cartItemsCount > 0" class="jb-cart-badge">
               {{ cartItemsCount }}
             </span>
           </button>
-          <nuxt-link v-if="user" to="/panel/favorites">
-            <img src="/icons/heart.svg" class="border-2 border-gray-300 rounded-xl p-2" />
-          </nuxt-link>
         </div>
       </div>
-
-      <div class="container py-2 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-          <HeaderMenu />
-        </div>
-
-        <div class="flex gap-2 items-center">
-          <div>
-            <h3 class="font-bold">تلفن تماس</h3>
-            <div class="font-medium">{{ phoneNumber }}</div>
-            <p class="text-sm text-gray-500">10 صبح تا 5 عصر</p>
-          </div>
-          <IconPhone />
-        </div>
-      </div>
-      <div class="border-b h-1"></div>
     </div>
 
-    <!-- Mobile Header -->
+    <!-- ==================== موبایل ==================== -->
     <div class="md:hidden">
-      <div class="container w-full flex justify-between items-center py-3">
-        <!-- Hamburger Menu (Left) -->
-        <button @click="toggleMenu" class="p-2 rounded-xl border-2 border-gray-300">
-          <IconMenu />
-        </button>
-
-        <!-- Logo (Center) -->
-        <SharedLogo :width="'80px'" :height="'54px'" />
-
-        <!-- Profile (Right) -->
-
-        <div class="flex gap-2">
-          <button type="button" class="relative" @click="openCartSidebar">
-            <img src="/icons/bag.svg" class="rounded-xl border p-1 border-gray-300 bg-secondary" />
-            <span v-if="cartItemsCount > 0" class="cart-badge">{{
-              cartItemsCount
-            }}</span>
+      <div class="jb-header">
+        <div class="container w-full flex items-center justify-between py-3">
+          <!-- راست: دکمه منو -->
+          <button
+            @click="toggleMenu"
+            class="jb-icon-btn p-2"
+            aria-label="باز کردن منو"
+          >
+            <IconMenu class="w-6 h-6 text-[color:var(--jb-fuchsia)]" />
           </button>
+
+          <!-- وسط: لوگو -->
+          <SharedLogo :width="'80px'" :height="'54px'" />
+
+          <!-- چپ: سبد خرید + پروفایل -->
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="relative jb-icon-btn p-2"
+              @click="openCartSidebar"
+              aria-label="سبد خرید"
+            >
+              <img src="/icons/bag.svg" class="w-5 h-5" />
+              <span v-if="cartItemsCount > 0" class="jb-cart-badge">
+                {{ cartItemsCount }}
+              </span>
+            </button>
+            <HeaderBtnProfile />
+          </div>
         </div>
-        <HeaderBtnProfile />
-
       </div>
-      <div class="container border-b-2 border-gray-400 pb-4">
-        <HeaderSearch class="headerSearchMobile" />
 
-      </div>
-      <!-- Mobile Menu Overlay -->
+      <!-- منوی موبایل -->
       <transition name="slide">
-        <div v-if="isMenuOpen" class="fixed inset-0 bg-black/40 z-[10000]" @click="toggleMenu">
-          <div class="fixed right-0 top-0 h-full w-[85vw] max-w-[360px] bg-white shadow-2xl flex flex-col" @click.stop>
-            <!-- Header: Logo + Close -->
-            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 shrink-0">
+        <div
+          v-if="isMenuOpen"
+          class="fixed inset-0 bg-black/50 z-[10000]"
+          @click="toggleMenu"
+        >
+          <div
+            class="jb-mobile-drawer fixed right-0 top-0 h-full w-[88vw] max-w-[380px] flex flex-col"
+            @click.stop
+          >
+            <!-- هدر: لوگو + بستن -->
+            <div class="flex items-center justify-between px-4 py-3 border-b-2 border-dashed border-[color:var(--jb-pink-300)] shrink-0">
               <SharedLogo :width="'70px'" :height="'47px'" />
-              <button @click="toggleMenu" class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                aria-label="بستن منو">
-                <IconClose />
+              <button
+                @click="toggleMenu"
+                class="jb-icon-btn p-2"
+                aria-label="بستن منو"
+              >
+                <IconClose class="w-5 h-5 text-[color:var(--jb-fuchsia)]" />
               </button>
             </div>
 
-            <!-- Tabs -->
-            <div class="flex border-b border-gray-200 shrink-0">
-              <button @click="activeTab = 'menu'" class="flex-1 py-3 text-sm font-medium transition-colors relative"
-                :class="activeTab === 'menu' ? 'text-secondary' : 'text-gray-500'">
-                منو
-                <span v-if="activeTab === 'menu'"
-                  class="absolute bottom-0 right-0 left-0 h-0.5 bg-secondary rounded-full"></span>
-              </button>
-              <button @click="activeTab = 'categories'"
-                class="flex-1 py-3 text-sm font-medium transition-colors relative"
-                :class="activeTab === 'categories' ? 'text-secondary' : 'text-gray-500'">
-                دسته‌بندی‌ها
-                <span v-if="activeTab === 'categories'"
-                  class="absolute bottom-0 right-0 left-0 h-0.5 bg-secondary rounded-full"></span>
-              </button>
+            <!-- سرچ بالا -->
+            <div class="px-4 py-3 shrink-0 border-b-2 border-dashed border-[color:var(--jb-pink-200)]">
+              <HeaderSearch />
             </div>
 
-            <!-- Tab Content (scrollable) -->
-            <div class="flex-1 overflow-y-auto overscroll-contain">
-              <!-- Menu Tab -->
+            <!-- محتوای تب (قابل اسکرول) -->
+            <div class="flex-1 overflow-y-auto overscroll-contain jb-scroll">
+              <!-- تب منو -->
               <div v-show="activeTab === 'menu'" class="p-4">
                 <HeaderMenu :menuToggleFunction="toggleMenu" />
               </div>
 
-              <!-- Categories Tab -->
-              <div v-show="activeTab === 'categories'" class="p-4">
-                <div v-if="loadingCategories" class="flex justify-center py-8">
-                  <span class="text-gray-400 text-sm">در حال بارگذاری...</span>
-                </div>
-                <ul v-else class="flex flex-col gap-1">
-                  <li v-for="cat in categories" :key="cat.id">
-                    <nuxt-link :to="cat.id === 0 ? '/products' : `/products?category_ids=${cat.id}`"
-                      class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      @click="toggleMenu">
-                      <span>{{ cat.title }}</span>
-                      <IconChevronLeft class="w-4 h-4 text-gray-400" />
-                    </nuxt-link>
-                  </li>
-                </ul>
-              </div>
             </div>
 
-            <!-- Phone (fixed at bottom) -->
-            <div class="shrink-0 border-t border-gray-200 px-4 py-3">
-              <div class="flex items-center gap-3">
-                <IconPhone />
-                <div>
-                  <h3 class="text-xs text-gray-500 font-normal">تلفن تماس</h3>
-                  <div class="text-sm font-medium">{{ phoneNumber }}</div>
-                </div>
+            <!-- پایین: شبکه‌های اجتماعی -->
+            <div class="shrink-0 border-t-2 border-dashed border-[color:var(--jb-pink-300)] px-4 py-3 bg-white/60">
+              <p class="text-xs font-bold jb-text-pink mb-2">ما را دنبال کنید</p>
+              <div class="flex items-center gap-2 flex-wrap">
+                <a
+                  v-for="item in socialLinks"
+                  :key="item.label"
+                  :href="item.href"
+                  target="_blank"
+                  rel="noopener"
+                  :title="item.label"
+                  class="jb-icon-btn w-9 h-9"
+                >
+                  <img :src="item.icon" :alt="item.label" class="w-4 h-4" />
+                </a>
               </div>
             </div>
           </div>
@@ -150,13 +154,13 @@ import { useApi } from "@/composables/api/useApi";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "~/store/settings";
 import { useCategoryStore } from "~/store/menu.js";
+
 const categoryStore = useCategoryStore();
 const settingStore = useSettingStore();
-
 const { getBase } = useApi();
 
 const isMenuOpen = ref(false);
-const { user } = storeToRefs(settingStore);
+const activeTab = ref("menu");
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -166,17 +170,15 @@ const openCartSidebar = () => {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new Event("open-cart-sidebar"));
 };
-// شمارش ری‌اکتیو سبد خرید (لحظه‌ای)
 
+/* ---------------- سبد خرید ---------------- */
 const cartItemsCount = ref(0);
 
 const readCartCount = () => {
   if (typeof window === "undefined") return 0;
-
   try {
     const summary = JSON.parse(localStorage.getItem("cart-summary") || "{}");
     if (typeof summary.totalQuantity === "number") return summary.totalQuantity;
-
     const guestCart = JSON.parse(localStorage.getItem("guest-cart") || "{}");
     const items = guestCart.items || [];
     return items.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
@@ -200,117 +202,82 @@ onBeforeUnmount(() => {
   window.removeEventListener("cart-updated", syncCartCount);
 });
 
-// دریافت تنظیمات از API
+/* ---------------- دریافت تنظیمات ---------------- */
 const { data: baseData } = await useAsyncData(
   "headerBaseData",
   async () => {
     try {
       return await getBase();
     } catch (error) {
-      console.error("❌ Failed to fetch base data in header:", error);
+      console.error("❌ Failed to fetch base data:", error);
       return { data: { settings: [] } };
     }
   },
-  {
-    lazy: true,
-    server: false,
-  },
+  { lazy: true, server: false }
 );
 
-// شماره تلفن از settings
-const phoneNumber = computed(() => {
-  const settings = baseData.value?.data?.settings?.site;
-  return settings?.support_phone || "------------";
-});
-// تب فعال
-const activeTab = ref("menu");
+/* ---------------- شبکه‌های اجتماعی ---------------- */
+const fallbackSocials = [
+  { key: "instagram", label: "اینستاگرام", icon: "/icons/instagram.svg" },
+  { key: "telegram",  label: "تلگرام",    icon: "/icons/telegram.svg" },
+  { key: "whatsapp",  label: "واتساپ",    icon: "/icons/whatsapp.svg" },
+];
 
-// دسته‌بندی‌ها
+function extractHandle(url) {
+  if (!url) return "";
+  try {
+    const u = new URL(url);
+    return u.pathname.replace(/\/+$/, "").replace(/^\//, "") || u.hostname;
+  } catch {
+    return url;
+  }
+}
+
+const socialLinks = computed(() => {
+  const socials = baseData.value?.data?.settings?.site?.social || {};
+  const map = [
+    { key: "instagram", label: "اینستاگرام", icon: "/icons/instagram.svg" },
+    { key: "telegram",  label: "تلگرام",    icon: "/icons/telegram.svg" },
+    { key: "whatsapp",  label: "واتساپ",    icon: "/icons/whatsapp.svg" },
+    { key: "youtube",   label: "یوتیوب",    icon: "/icons/youtube.svg" },
+    { key: "rubika",    label: "روبیکا",    icon: "/icons/rubika.png" },
+  ];
+
+  const dynamicItems = map
+    .filter((item) => socials[item.key])
+    .map((item) => ({
+      label: item.label,
+      href: socials[item.key],
+      icon: item.icon,
+    }));
+
+  return dynamicItems.length ? dynamicItems : fallbackSocials;
+});
+
+/* ---------------- دسته‌بندی‌ها ---------------- */
 const categories = ref([]);
 const loadingCategories = ref(false);
-const selectedCategory = ref(null);
 
 const fetchCategories = async () => {
   loadingCategories.value = true;
   try {
     const res = await categoryStore.fetchFilters();
-    const inMenu = [1, 2, 6, 3, 4, 7, 12, 10];
-    const list = res?.data?.categories?.filter(cat => !inMenu.includes(cat.id)) || [];
+    const list = res?.data?.categories || [];
     categories.value = [{ id: 0, title: "همه دسته‌ها" }, ...list];
-    if (!selectedCategory.value) {
-      selectedCategory.value = categories.value[0];
-    }
-  } catch (err) {
+  } catch {
     categories.value = [{ id: 0, title: "همه دسته‌ها" }];
   } finally {
     loadingCategories.value = false;
   }
 };
 
-// وقتی کاربر تب دسته‌بندی‌ها رو باز کرد و هنوز لود نشده، fetch کن
 watch(activeTab, (tab) => {
   if (tab === "categories" && categories.value.length === 0) {
     fetchCategories();
   }
 });
 
-// وقتی منو بسته شد، تب رو ریست کن (اختیاری)
 watch(isMenuOpen, (open) => {
   if (!open) activeTab.value = "menu";
 });
 </script>
-
-<style>
-.icon-btn {
-  background-color: var(--bg-secondary-fade);
-  cursor: pointer;
-}
-
-.icon-btn:hover {
-  background-color: var(--bg-secondary);
-  transition: 0.4s;
-}
-
-/* Cart Badge */
-.cart-badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background-color: var(--red);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 15px;
-  height: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-/* Slide Animation */
-.slide-enter-active,
-.slide-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  opacity: 0;
-}
-
-.slide-enter-active .fixed.right-0,
-.slide-leave-active .fixed.right-0 {
-  transition: transform 0.3s ease;
-}
-
-.slide-enter-from .fixed.right-0,
-.slide-leave-to .fixed.right-0 {
-  transform: translateX(100%);
-}
-
-.headerSearchMobile {
-  width: 100%;
-}
-</style>

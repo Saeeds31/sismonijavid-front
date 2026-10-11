@@ -19,21 +19,21 @@
 
     <div v-else-if="home" class="space-y-10">
       <HomeSlider :sliders="home.sliders" />
-      <HomeNewProductsList :new_products="home.new_products" />
+      <HomeNewProductsList :new_products="home.is_rechargeables" />
       <HomeCategories :categories="home.selected_categories" />
-      <HomeBanners v-if="home.banners?.after_discount?.length" :banners="home.banners.after_discount" />
+      <!-- <HomeBanners v-if="home.banners?.after_discount?.length" :banners="home.banners.after_discount" /> -->
 
       <!-- محصولات جدید با دیتا از products و فیلتر از shop-filters -->
       <HomeNewProducts :selectedCategoryList="home.selectedCategoryList" v-if="home && home.selectedCategoryList" />
 
-      <HomeBannerTriple :items="banners" />
-      <HomeVotedRestockSection v-if="home && home.is_rechargeables && home.is_rechargeables.length"
-        :products="home.is_rechargeables" />
+      <!-- <HomeBannerTriple :items="banners" /> -->
+      <!-- <HomeVotedRestockSection v-if="home && home.is_rechargeables && home.is_rechargeables.length"
+        :products="home.is_rechargeables" /> -->
 
-      <HomeBannerTriple v-if="bannersBeforeAbout.length" :items="bannersBeforeAbout" />
+      <!-- <HomeBannerTriple v-if="bannersBeforeAbout.length" :items="bannersBeforeAbout" /> -->
 
-      <HomeBanners v-if="home.banners?.after_new_product?.length" :banners="home.banners.after_new_product" />
-      <HomeBanners v-if="home.banners?.before_blog?.length" :banners="home.banners.before_blog" />
+      <!-- <HomeBanners v-if="home.banners?.after_new_product?.length" :banners="home.banners.after_new_product" /> -->
+      <!-- <HomeBanners v-if="home.banners?.before_blog?.length" :banners="home.banners.before_blog" /> -->
       <AboutHomeStor />
       <AboutFAQSection />
       />

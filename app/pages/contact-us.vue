@@ -1,18 +1,20 @@
 <template>
-  <main class="pb-20 flex flex-col px-4 md:px-8 xl:px-28">
-    <SharedBreadCrumb
-      class="mb-8"
-      :items="[{ label: 'تماس با ما', href: '/contact-us' }]"
-    />
+  <main class="jb-contact-page">
+    <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-28">
+      <SharedBreadCrumb
+        class="mb-8"
+        :items="[{ label: 'تماس با ما', href: '/contact-us' }]"
+      />
 
-    <ContactHeroSection :contact-info="contactInfo" />
+      <ContactHeroSection :contact-info="contactInfo" />
 
-    <ContactFormSection
-      class="mt-16"
-      :model="form"
-      :loading="loading"
-      @submit="submitForm"
-    />
+      <ContactFormSection
+        class="mt-16"
+        :model="form"
+        :loading="loading"
+        @submit="submitForm"
+      />
+    </div>
   </main>
 </template>
 
@@ -22,13 +24,13 @@ import { reactive, ref, computed } from "vue";
 const config = useRuntimeConfig();
 const apiBase = (config.public.apiBase || config.public.baseURL || "").replace(
   /\/$/,
-  "",
+  ""
 );
 
 const defaultContactInfo = {
-  address: "گرگان - خیابان پنج آذر، جنب سالن تختی",
-  mobile: "۰۹۳۷-۵۰۱-۵۷۶۹",
-  phone: "۰۹۳۷-۵۰۱-۵۵۵۴",
+  address: "گرگان - خیابان سرخواجه , مجتمع آفتاب سه طبقه همکف",
+  mobile: "09112808522",
+  phone: "01732330749",
   supportHours: "۰۹:۰۰ تا ۱۷:۰۰",
   storeHours: "۰۹:۰۰ تا ۲۱:۰۰",
   telegram: "https://t.me/sismonijavid",
@@ -38,12 +40,11 @@ const defaultContactInfo = {
 };
 
 const { data } = await useAsyncData("contact-page", async () => {
-  // در صورت اتصال API تنظیمات تماس، اینجا داده‌ها را fetched کنید.
   return null;
 });
 
 const contactInfo = computed(
-  () => data.value?.contactInfo ?? defaultContactInfo,
+  () => data.value?.contactInfo ?? defaultContactInfo
 );
 
 const form = reactive({
@@ -131,3 +132,12 @@ const submitForm = async () => {
   }
 };
 </script>
+
+<style scoped>
+.jb-contact-page {
+  padding-bottom: 80px;
+  background: linear-gradient(135deg, #fff8fb 0%, #fff0f5 50%, #ffeaf2 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+</style>

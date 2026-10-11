@@ -1,103 +1,497 @@
 <script setup>
-const route = useRoute()
-const status = computed(() => route.query.status === 'success' ? 'success' : 'failed')
-const walletTransactionId = computed(() => route.query.wallet_transaction_id || null)
-const amount = computed(() => route.query.amount || null)
-const balance = computed(() => route.query.balance || null)
-const isSuccess = computed(() => status.value === 'success')
+const route = useRoute();
+const status = computed(() =>
+  route.query.status === "success" ? "success" : "failed"
+);
+const walletTransactionId = computed(
+  () => route.query.wallet_transaction_id || null
+);
+const amount = computed(() => route.query.amount || null);
+const balance = computed(() => route.query.balance || null);
+const isSuccess = computed(() => status.value === "success");
 
-// عنوان بر اساس وضعیت
 const title = computed(() =>
-    isSuccess.value ? 'شارژ کیف پول با موفقیت انجام شد' : 'شارژ کیف پول ناموفق بود'
-)
+  isSuccess.value
+    ? "شارژ کیف پول با موفقیت انجام شد"
+    : "شارژ کیف پول ناموفق بود"
+);
 
-// توضیحات
 const description = computed(() => {
-    if (isSuccess.value) {
-        let text = 'کیف پول شما با موفقیت شارژ شد.'
-        if (amount.value) {
-            text += ` مبلغ ${new Intl.NumberFormat('fa-IR').format(Number(amount.value))} تومان به حساب شما واریز شد.`
-        }
-        if (balance.value) {
-            text += ` موجودی فعلی شما: ${new Intl.NumberFormat('fa-IR').format(Number(balance.value))} تومان`
-        }
-        return text
+  if (isSuccess.value) {
+    let text = "کیف پول شما با موفقیت شارژ شد.";
+    if (amount.value) {
+      text += ` مبلغ ${new Intl.NumberFormat("fa-IR").format(
+        Number(amount.value)
+      )} تومان به حساب شما واریز شد.`;
     }
-    return 'متاسفانه در فرایند شارژ کیف پول مشکلی پیش آمد. در صورت کسر وجه، مبلغ تا ۷۲ ساعت آینده به حساب شما بازخواهد گشت.'
-})
+    if (balance.value) {
+      text += ` موجودی فعلی شما: ${new Intl.NumberFormat("fa-IR").format(
+        Number(balance.value)
+      )} تومان`;
+    }
+    return text;
+  }
+  return "متاسفانه در فرایند شارژ کیف پول مشکلی پیش آمد. در صورت کسر وجه، مبلغ تا ۷۲ ساعت آینده به حساب شما بازخواهد گشت.";
+});
 
-// دکمه‌های اصلی
 const primaryAction = computed(() => {
-    if (isSuccess.value) {
-        return {
-            label: 'مشاهده کیف پول',
-            to: '/panel/wallet'
-        }
-    }
+  if (isSuccess.value) {
     return {
-        label: 'تلاش مجدد',
-        to: '/panel/wallet'
-    }
-})
+      label: "مشاهده کیف پول",
+      to: "/panel/wallet",
+    };
+  }
+  return {
+    label: "تلاش مجدد",
+    to: "/panel/wallet",
+  };
+});
 </script>
 
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4" dir="rtl">
-        <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 text-center">
+  <div class="jb-wallet-result-page">
+    <!-- حباب‌های تزئینی -->
+    <div class="jb-result-bubble jb-result-bubble-1"></div>
+    <div class="jb-result-bubble jb-result-bubble-2"></div>
 
-            <!-- آیکون -->
-            <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full"
-                :class="isSuccess ? 'bg-green-100' : 'bg-red-100'">
-                <!-- آیکون موفقیت -->
-                <svg v-if="isSuccess" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-
-                <!-- آیکون کیف پول برای موفقیت -->
-                <svg v-if="isSuccess" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600 absolute"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3 10h18M5 6h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z" />
-                </svg>
-
-                <!-- آیکون خطا -->
-                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-600" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </div>
-
-            <!-- عنوان -->
-            <h1 class="text-xl font-bold mb-2" :class="isSuccess ? 'text-green-700' : 'text-red-700'">
-                {{ title }}
-            </h1>
-
-            <!-- توضیحات -->
-            <p class="text-gray-500 text-sm leading-6 mb-4">
-                {{ description }}
-            </p>
-
-            <!-- شماره تراکنش (در صورت موفقیت) -->
-            <div v-if="isSuccess && walletTransactionId" class="mb-6 text-xs text-gray-400">
-                <span>شماره تراکنش: </span>
-                <span dir="ltr" class="font-mono">{{ walletTransactionId }}</span>
-            </div>
-
-            <!-- دکمه‌ها -->
-            <div class="flex flex-col gap-3">
-                <NuxtLink :to="primaryAction.to"
-                    class="w-full inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium text-white transition"
-                    :class="isSuccess ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-800 hover:bg-gray-900'">
-                    {{ primaryAction.label }}
-                </NuxtLink>
-
-                <NuxtLink v-if="!isSuccess" to="/"
-                    class="w-full inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-medium text-gray-600 border border-gray-200 hover:bg-gray-50 transition">
-                    بازگشت به صفحه اصلی
-                </NuxtLink>
-            </div>
-
+    <div
+      class="jb-result-card"
+      :class="isSuccess ? 'is-success' : 'is-failed'"
+    >
+      <!-- ===== آیکون نتیجه ===== -->
+      <div class="jb-result-icon-wrap">
+        <div
+          class="jb-result-icon"
+          :class="isSuccess ? 'jb-icon-success' : 'jb-icon-failed'"
+        >
+          <svg
+            v-if="isSuccess"
+            class="w-10 h-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          <svg
+            v-else
+            class="w-10 h-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
         </div>
+
+        <span class="jb-result-ring jb-ring-1"></span>
+        <span class="jb-result-ring jb-ring-2"></span>
+      </div>
+
+      <!-- ===== تیتر ===== -->
+      <h1
+        class="jb-result-title"
+        :class="isSuccess ? 'jb-title-success' : 'jb-title-failed'"
+      >
+        {{ title }}
+      </h1>
+
+      <!-- خط تزئینی -->
+      <div
+        class="jb-result-divider"
+        :class="isSuccess ? 'jb-divider-success' : 'jb-divider-failed'"
+      ></div>
+
+      <!-- توضیحات -->
+      <p class="jb-result-desc">{{ description }}</p>
+
+      <!-- اطلاعات تراکنش (در صورت موفقیت) -->
+      <div
+        v-if="isSuccess && walletTransactionId"
+        class="jb-result-info"
+      >
+        <div class="jb-result-info-row">
+          <span class="jb-result-info-label">شماره تراکنش</span>
+          <span class="jb-result-info-value" dir="ltr">
+            {{ walletTransactionId }}
+          </span>
+        </div>
+      </div>
+
+      <!-- دکمه‌ها -->
+      <div class="jb-result-actions">
+        <NuxtLink
+          :to="primaryAction.to"
+          class="jb-btn-linear jb-result-btn-primary"
+        >
+          <span>{{ primaryAction.label }}</span>
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.5"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </NuxtLink>
+
+        <NuxtLink
+          v-if="!isSuccess"
+          to="/"
+          class="jb-result-btn-secondary"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.2"
+              d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"
+            />
+          </svg>
+          بازگشت به صفحه اصلی
+        </NuxtLink>
+      </div>
     </div>
+  </div>
 </template>
+
+<style scoped>
+/* =========================================================
+   صفحه نتیجه شارژ کیف پول - تم پودری
+   ========================================================= */
+
+.jb-wallet-result-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  background: linear-gradient(135deg, #fff0f5 0%, #ffe0eb 50%, #ffd0e0 100%);
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+.jb-result-bubble {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: jbFloatBubble 8s ease-in-out infinite;
+}
+
+.jb-result-bubble-1 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(255, 122, 160, 0.22), transparent 70%);
+  top: -120px;
+  right: -100px;
+}
+
+.jb-result-bubble-2 {
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(214, 51, 132, 0.18), transparent 70%);
+  bottom: -80px;
+  left: -80px;
+  animation-delay: 3s;
+}
+
+@keyframes jbFloatBubble {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-24px) scale(1.05); }
+}
+
+/* کارت */
+.jb-result-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 48px 32px 36px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--jb-pink-200);
+  border-radius: 32px;
+  text-align: center;
+  box-shadow:
+    0 25px 60px rgba(214, 51, 132, 0.18),
+    0 10px 25px rgba(255, 122, 160, 0.15);
+  animation: jbCardIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes jbCardIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.jb-result-card.is-success {
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.jb-result-card.is-failed {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+/* آیکون */
+.jb-result-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  margin-bottom: 24px;
+}
+
+.jb-result-icon {
+  position: relative;
+  z-index: 2;
+  width: 88px;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  border: 4px solid #fff;
+  animation: jbIconPop 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.15s backwards;
+}
+
+@keyframes jbIconPop {
+  0%   { transform: scale(0); }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.jb-icon-success {
+  background: linear-gradient(135deg, #4ade80, #16a34a);
+  box-shadow:
+    0 12px 30px rgba(34, 197, 94, 0.45),
+    0 4px 10px rgba(34, 197, 94, 0.25);
+}
+
+.jb-icon-failed {
+  background: linear-gradient(135deg, #ff4d6d, #c9184a);
+  box-shadow:
+    0 12px 30px rgba(201, 24, 74, 0.45),
+    0 4px 10px rgba(201, 24, 74, 0.25);
+}
+
+/* حلقه‌های تزئینی */
+.jb-result-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.jb-ring-1 {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed;
+  animation: jbRingPulse 2.5s ease-in-out infinite;
+}
+
+.jb-ring-2 {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed;
+  animation: jbRingPulse 2.5s ease-in-out infinite 0.4s;
+  opacity: 0.5;
+}
+
+.is-success .jb-ring-1,
+.is-success .jb-ring-2 {
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.is-failed .jb-ring-1,
+.is-failed .jb-ring-2 {
+  border-color: rgba(201, 24, 74, 0.35);
+}
+
+@keyframes jbRingPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* تیتر */
+.jb-result-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  margin-bottom: 14px;
+}
+
+.jb-title-success { color: #16a34a; }
+.jb-title-failed  { color: #c9184a; }
+
+/* خط تزئینی */
+.jb-result-divider {
+  width: 80px;
+  height: 3px;
+  border-radius: 999px;
+  margin: 0 auto 18px;
+}
+
+.jb-divider-success {
+  background: linear-gradient(90deg, transparent, #4ade80, #16a34a, #4ade80, transparent);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
+}
+
+.jb-divider-failed {
+  background: linear-gradient(90deg, transparent, #ff4d6d, #c9184a, #ff4d6d, transparent);
+  box-shadow: 0 2px 8px rgba(201, 24, 74, 0.35);
+}
+
+/* توضیحات */
+.jb-result-desc {
+  font-size: 0.88rem;
+  line-height: 2;
+  color: var(--jb-text-soft);
+  font-weight: 600;
+  padding: 0 8px;
+  margin-bottom: 24px;
+}
+
+/* اطلاعات تراکنش */
+.jb-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #fff8fb, #ffeaf2);
+  border: 2px dashed var(--jb-pink-300);
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.jb-result-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.82rem;
+}
+
+.jb-result-info-label {
+  color: var(--jb-text-muted);
+  font-weight: 700;
+}
+
+.jb-result-info-value {
+  color: var(--jb-fuchsia);
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+  word-break: break-all;
+}
+
+/* دکمه‌ها */
+.jb-result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jb-result-btn-primary {
+  width: 100%;
+  justify-content: center;
+  padding: 14px 24px !important;
+  font-size: 0.92rem !important;
+}
+
+.jb-result-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 24px;
+  background: #fff;
+  border: 2px solid var(--jb-pink-300);
+  border-radius: 14px;
+  color: var(--jb-fuchsia);
+  font-size: 0.88rem;
+  font-weight: 800;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.jb-result-btn-secondary:hover {
+  background: var(--jb-pink-100);
+  border-color: var(--jb-fuchsia);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(214, 51, 132, 0.2);
+}
+
+/* ریسپانسیو */
+@media (max-width: 480px) {
+  .jb-result-card {
+    padding: 40px 20px 28px;
+    border-radius: 26px;
+  }
+
+  .jb-result-icon-wrap {
+    width: 96px;
+    height: 96px;
+  }
+
+  .jb-result-icon {
+    width: 76px;
+    height: 76px;
+  }
+
+  .jb-ring-1 { width: 88px;  height: 88px;  }
+  .jb-ring-2 { width: 106px; height: 106px; }
+
+  .jb-result-title {
+    font-size: 1.15rem;
+  }
+
+  .jb-result-desc {
+    font-size: 0.82rem;
+    line-height: 1.9;
+  }
+}
+</style>

@@ -1,47 +1,64 @@
-<!-- app/pages/about-us.vue -->
 <template>
-  <main class="pb-20 flex flex-col px-4 md:px-8 xl:px-28">
-    <SharedBreadCrumb :items="[{ label: 'درباره ما', href: '/about-us' }]" />
+  <main class="jb-about-page">
+    <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-28">
+      <SharedBreadCrumb :items="[{ label: 'درباره ما', href: '/about-us' }]" />
 
-    <AboutHeroCollage :image-src="aboutData.hero.imageSrc" :alt="aboutData.hero.alt"
-      :fallback-src="aboutData.hero.fallbackSrc" />
+      <AboutHeroCollage
+        :image-src="aboutData.hero.imageSrc"
+        :alt="aboutData.hero.alt"
+        :fallback-src="aboutData.hero.fallbackSrc"
+      />
 
-    <AboutStorySection :title="aboutData.story.title" :paragraphs="aboutData.story.paragraphs"
-      :highlight="aboutData.story.highlight" :image-src="aboutData.story.imageSrc" :image-alt="aboutData.story.imageAlt"
-      :fallback-src="aboutData.story.fallbackSrc" />
+      <AboutStorySection
+        :title="aboutData.story.title"
+        :paragraphs="aboutData.story.paragraphs"
+        :highlight="aboutData.story.highlight"
+        :image-src="aboutData.story.imageSrc"
+        :image-alt="aboutData.story.imageAlt"
+        :fallback-src="aboutData.story.fallbackSrc"
+      />
 
-    <AboutFAQSection />
+      <AboutFAQSection />
+    </div>
   </main>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from "vue";
 
 const defaultAbout = {
   hero: {
-    imageSrc: '/about/Group.svg',
-    alt: 'sismonijavid Model',
-    fallbackSrc: '/contact/Group.svg'
+    imageSrc: "/about/Group.jpg",
+    alt: "سیسمونی جاوید",
+    fallbackSrc: "/contact/Group.svg",
   },
   story: {
-    title: 'فروشگاه سیسمونی جاوید ، انتخابی شایسته',
+    title: "فروشگاه سیسمونی جاوید، انتخابی شایسته",
     paragraphs: [
-      'مجموعه سیسمونی جاوید توسط سه خواهر از سال ۱۳۹۵ شروع به فعالیت کرده است و از فروش محلی و منطقه‌ای توانسته است با تلاش فراوان به فروش در سطح کشور برسد و در خدمت شمار زیادی از مشتریان گرامی در سطح کشور باشد.',
-      'این مجموعه همواره در تلاش است با ارائه محصولات با کیفیت که قیمت‌های مناسبی دارند بهترین خدمات را به شما مشتریان عزیز ارائه دهد.',
-      'سیسمونی جاوید متنوع‌ترین و باکیفیت‌ترین انواع لباس‌های زیر را در دسترس شما عزیزان قرار داده تا بتوانید متناسب با نیاز خود مدل دلخواه را انتخاب کنید.'
+      "مجموعه سیسمونی جاوید از سال ۱۳۹۵ فعالیت خود را با عشق و علاقه به دنیای کودکان آغاز کرد و با تلاش سه خواهر، از یک فروشگاه محلی به یکی از فروشگاه‌های محبوب سیسمونی در سطح کشور تبدیل شد.",
+      "ما همواره در تلاشیم با ارائه‌ی محصولات باکیفیت و قیمت‌های مناسب، بهترین تجربه‌ی خرید را برای والدین عزیز و کوچولوی دوست‌داشتنی‌شان فراهم کنیم.",
+      "سیسمونی جاوید مجموعه‌ای متنوع از لباس نوزاد، اسباب‌بازی، لوازم بهداشتی و سیسمونی را در اختیار شما قرار می‌دهد تا متناسب با سلیقه و نیاز خود، بهترین انتخاب را داشته باشید.",
     ],
     highlight:
-      'ما به دنبال تعادل بین راحتی، پوشیدنی بودن و زیبایی بی‌همتا هستیم. محصولاتی که با مواد باکیفیت، دوخت دقیق و دغدغه‌ی سلامت پوست طراحی شده‌اند برای زنانی که به خودشان اهمیت می‌دهند.',
-    imageSrc: '/about/model-pink.svg',
-    imageAlt: 'sismonijavid Model',
-    fallbackSrc: '/contact/Group.svg'
-  }
-}
+      "ما به دنبال ایجاد تعادل میان کیفیت، ایمنی و زیبایی برای کوچولوی شما هستیم. محصولاتی که با مواد باکیفیت، دوخت دقیق و دغدغه‌ی سلامت پوست نوزاد طراحی شده‌اند؛ چون برای ما، آرامش و لبخند کودک شما، مهم‌ترین است.",
+    imageSrc: "/about/model-pink.jpg",
+    imageAlt: "سیسمونی جاوید",
+    fallbackSrc: "/contact/Group.svg",
+  },
+};
 
-const { data } = await useAsyncData('about-page', async () => {
-  // در آینده: return await $fetch('/api/about')
-  return null
-})
+const { data } = await useAsyncData("about-page", async () => {
+  return null;
+});
 
-const aboutData = computed(() => data.value ?? defaultAbout)
+const aboutData = computed(() => data.value ?? defaultAbout);
 </script>
+
+<style scoped>
+.jb-about-page {
+  padding-bottom: 80px;
+  background: linear-gradient(135deg, #fff8fb 0%, #fff0f5 50%, #ffeaf2 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+</style>

@@ -235,7 +235,7 @@ watch(
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
         <ProductImage :images="product.images" :video="product.video" :thumbnails="product.images" />
 
-        <div class="flex flex-col justify-between h-full">
+        <div class="flex flex-col justify-start gap-6 h-full">
           <div id="info" class="space-y-6 lg:space-y-8">
             <ProductTitle :title="product.title" :price="currentPrice" :oldPrice="oldPrice"
               :in-stock="product.inStock" />

@@ -1,12 +1,16 @@
-<!-- app/components/product/tabs.vue -->
 <template>
-  <Section class="flex flex-col lg:flex-row gap-4">
-    <div class="w-full ">
-      <ProductTabsSectionTab :specifications="props.specifications" :description="props.description" />
+  <Section class="jb-tabs-section flex flex-col lg:flex-row gap-4 mt-8">
+    <div class="w-full">
+      <ProductTabsSectionTab
+        :specifications="props.specifications"
+        :description="props.description"
+      />
     </div>
   </Section>
-  <section class="relative pt-10 ">
-    <h2 class="mb-3 text-lg font-semibold text-gray-800 text-right">
+
+  <section class="relative pt-10">
+    <h2 class="jb-related-title">
+      <span class="jb-related-title-dot"></span>
       {{ title }}
     </h2>
     <HomeSlidersHomeOfferSlider :products="similarProducts" />
@@ -14,31 +18,17 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-// ایمپورت useApi اضافه شد
+import { onMounted, ref, computed } from "vue";
 import { useApi } from "@/composables/api/useApi";
 
-// تعریف کامل Props شامل productId
 const props = defineProps({
   specifications: Array,
-  description: {
-    type: String,
-    default: "",
-  },
-  products: {
-    // این prop در منطق جدید استفاده نمی‌شود اما برای سازگاری نگه داشته شده است
-    type: Array,
-    default: () => [],
-  },
-  title: {
-    type: String,
-    default: "محصولات مشابه ",
-  },
-  productId: {
-    type: [String, Number],
-    required: true,
-  },
+  description: { type: String, default: "" },
+  products: { type: Array, default: () => [] },
+  title: { type: String, default: "محصولات مشابه " },
+  productId: { type: [String, Number], required: true },
 });
+
 console.log("🔵 tabs.vue setup, productId:", props.productId, typeof props.productId);
 
 const { getSimilarProducts } = useApi();
@@ -48,11 +38,30 @@ const { data: similarData } = await useAsyncData(
     if (!props.productId) return null;
     return getSimilarProducts(props.productId);
   },
-  {
-    watch: [() => props.productId],
-  }
+  { watch: [() => props.productId] }
 );
+
 const similarProducts = computed(() => {
   return similarData.value?.data?.similar_products || [];
 });
 </script>
+
+<style scoped>
+.jb-related-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--jb-text);
+}
+
+.jb-related-title-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--jb-pink-500), var(--jb-fuchsia));
+  box-shadow: 0 0 0 4px rgba(214, 51, 132, 0.18);
+}
+</style>

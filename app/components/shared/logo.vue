@@ -1,7 +1,7 @@
 <template>
   <nuxt-link to="/">
     <figure class="m-0" :style="{ width: width, height: height }">
-      <img src="/icons/sismonijavid.svg" alt="" />
+      <img src="~/assets/images/logo.png" alt="" />
     </figure>
   </nuxt-link>
 </template>

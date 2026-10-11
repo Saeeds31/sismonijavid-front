@@ -1,5 +1,5 @@
 <template>
-  <div class="otp-input-container" dir="ltr">
+  <div class="jb-otp-container" dir="ltr">
     <input
       v-for="(digit, index) in length"
       :key="index"
@@ -9,7 +9,8 @@
       inputmode="numeric"
       pattern="[0-9]*"
       maxlength="1"
-      class="otp-input"
+      class="jb-otp-input"
+      :class="{ 'is-filled': digits[index] }"
       @input="handleInput(index, $event)"
       @keydown="handleKeyDown(index, $event)"
       @paste="handlePaste"
@@ -19,177 +20,212 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick } from "vue";
 
 const props = defineProps({
-  code: {
-    type: String,
-    default: '',
-  },
-  length: {
-    type: Number,
-    default: 6,
-  },
-})
+  code: { type: String, default: "" },
+  length: { type: Number, default: 6 },
+});
 
-const emit = defineEmits(['update:code'])
+const emit = defineEmits(["update:code"]);
 
-const digits = ref(Array(props.length).fill(''))
-const inputRefs = ref([])
+const digits = ref(Array(props.length).fill(""));
+const inputRefs = ref([]);
 
-// وقتی code از بیرون تغییر می‌کنه
-watch(() => props.code, (newCode) => {
-  if (newCode !== digits.value.join('')) {
-    digits.value = newCode.split('').slice(0, props.length)
-    while (digits.value.length < props.length) {
-      digits.value.push('')
+watch(
+  () => props.code,
+  (newCode) => {
+    if (newCode !== digits.value.join("")) {
+      digits.value = newCode.split("").slice(0, props.length);
+      while (digits.value.length < props.length) {
+        digits.value.push("");
+      }
     }
-  }
-}, { immediate: true })
+  },
+  { immediate: true }
+);
 
 const handleInput = (index, event) => {
-  const value = event.target.value
-  
-  // فقط عدد قبول کن
+  const value = event.target.value;
+
   if (!/^\d*$/.test(value)) {
-    event.target.value = ''
-    return
+    event.target.value = "";
+    return;
   }
 
-  // اگر چند تا عدد یکجا paste شد
   if (value.length > 1) {
-    const numbers = value.split('').filter(char => /\d/.test(char))
+    const numbers = value.split("").filter((char) => /\d/.test(char));
     numbers.forEach((num, i) => {
       if (index + i < props.length) {
-        digits.value[index + i] = num
+        digits.value[index + i] = num;
       }
-    })
-    
-    // فوکوس به آخرین خونه پر شده
-    const nextIndex = Math.min(index + numbers.length, props.length - 1)
-    focusInput(nextIndex)
+    });
+
+    const nextIndex = Math.min(index + numbers.length, props.length - 1);
+    focusInput(nextIndex);
   } else {
-    digits.value[index] = value
-    
-    // اگر عدد وارد شد، برو خونه بعدی
+    digits.value[index] = value;
+
     if (value && index < props.length - 1) {
-      focusInput(index + 1)
+      focusInput(index + 1);
     }
   }
 
-  emitCode()
-}
+  emitCode();
+};
 
 const handleKeyDown = (index, event) => {
-  // Backspace
-  if (event.key === 'Backspace') {
+  if (event.key === "Backspace") {
     if (!digits.value[index] && index > 0) {
-      // اگر خونه فعلی خالیه، برو عقب و پاکش کن
-      digits.value[index - 1] = ''
-      focusInput(index - 1)
-      emitCode()
+      digits.value[index - 1] = "";
+      focusInput(index - 1);
+      emitCode();
     } else if (digits.value[index]) {
-      // اگر خونه فعلی پره، پاکش کن
-      digits.value[index] = ''
-      emitCode()
+      digits.value[index] = "";
+      emitCode();
     }
-    event.preventDefault()
-  }
-  
-  // Arrow Left
-  if (event.key === 'ArrowLeft' && index > 0) {
-    focusInput(index - 1)
-    event.preventDefault()
-  }
-  
-  // Arrow Right
-  if (event.key === 'ArrowRight' && index < props.length - 1) {
-    focusInput(index + 1)
-    event.preventDefault()
+    event.preventDefault();
   }
 
-  // اگر خونه پر بود و عدد جدید زد، جایگزین کن
-  if (/^\d$/.test(event.key) && digits.value[index]) {
-    digits.value[index] = ''
+  if (event.key === "ArrowLeft" && index > 0) {
+    focusInput(index - 1);
+    event.preventDefault();
   }
-}
+
+  if (event.key === "ArrowRight" && index < props.length - 1) {
+    focusInput(index + 1);
+    event.preventDefault();
+  }
+
+  if (/^\d$/.test(event.key) && digits.value[index]) {
+    digits.value[index] = "";
+  }
+};
 
 const handlePaste = (event) => {
-  event.preventDefault()
-  const pastedData = event.clipboardData.getData('text')
-  const numbers = pastedData.replace(/\D/g, '').split('').slice(0, props.length)
-  
+  event.preventDefault();
+  const pastedData = event.clipboardData.getData("text");
+  const numbers = pastedData.replace(/\D/g, "").split("").slice(0, props.length);
+
   numbers.forEach((num, i) => {
-    digits.value[i] = num
-  })
-  
-  // فوکوس به آخرین خونه یا خونه بعدی خالی
-  const nextEmptyIndex = digits.value.findIndex(d => !d)
-  const focusIndex = nextEmptyIndex === -1 ? props.length - 1 : nextEmptyIndex
-  focusInput(focusIndex)
-  
-  emitCode()
-}
+    digits.value[i] = num;
+  });
+
+  const nextEmptyIndex = digits.value.findIndex((d) => !d);
+  const focusIndex = nextEmptyIndex === -1 ? props.length - 1 : nextEmptyIndex;
+  focusInput(focusIndex);
+
+  emitCode();
+};
 
 const focusInput = (index) => {
   nextTick(() => {
-    inputRefs.value[index]?.focus()
-    inputRefs.value[index]?.select()
-  })
-}
+    inputRefs.value[index]?.focus();
+    inputRefs.value[index]?.select();
+  });
+};
 
 const emitCode = () => {
-  const code = digits.value.join('')
-  emit('update:code', code)
-}
+  const code = digits.value.join("");
+  emit("update:code", code);
+};
 
 onMounted(() => {
-  // فوکوس خودکار روی اولین input
-  focusInput(0)
-})
+  focusInput(0);
+});
 </script>
 
 <style scoped>
-.otp-input-container {
+/* =========================================================
+   OTP Input - تم پودری
+   ========================================================= */
+
+.jb-otp-container {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
   direction: ltr;
 }
 
-.otp-input {
-  width: 48px;
-  height: 56px;
+.jb-otp-input {
+  position: relative;
+  width: 52px;
+  height: 62px;
   text-align: center;
-  font-size: 24px;
-  font-weight: 600;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  background-color: #0000000D;
-  transition: all 0.2s ease;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--jb-text);
+  border: 2px solid var(--jb-pink-200);
+  border-radius: 16px;
+  background: #fff;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
+  font-family: inherit;
+  caret-color: var(--jb-fuchsia);
 }
 
-.otp-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  transform: scale(1.05);
+.jb-otp-input::placeholder {
+  color: var(--jb-text-muted);
 }
 
-.otp-input:not(:placeholder-shown) {
-  border-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.05);
+/* هاور */
+.jb-otp-input:hover {
+  border-color: var(--jb-pink-400);
 }
 
+/* فوکوس */
+.jb-otp-input:focus {
+  border-color: var(--jb-fuchsia);
+  background: #fff;
+  box-shadow:
+    0 0 0 4px rgba(214, 51, 132, 0.18),
+    0 8px 20px rgba(214, 51, 132, 0.15);
+  transform: translateY(-3px) scale(1.06);
+}
+
+/* پر شده */
+.jb-otp-input.is-filled {
+  border-color: var(--jb-pink-400);
+  background: linear-gradient(135deg, #fff8fb, #ffeaf2);
+  color: var(--jb-fuchsia);
+  box-shadow: 0 6px 16px rgba(214, 51, 132, 0.15);
+}
+
+/* پر شده + فوکوس */
+.jb-otp-input.is-filled:focus {
+  background: linear-gradient(135deg, #ffeaf2, #ffe0eb);
+  border-color: var(--jb-fuchsia);
+  box-shadow:
+    0 0 0 4px rgba(214, 51, 132, 0.22),
+    0 10px 24px rgba(214, 51, 132, 0.22);
+}
+
+/* =========================================================
+   ریسپانسیو
+   ========================================================= */
 @media (max-width: 480px) {
-  .otp-input {
-    width: 40px;
-    height: 48px;
-    font-size: 20px;
+  .jb-otp-container {
+    gap: 7px;
   }
-  
-  .otp-input-container {
-    gap: 6px;
+
+  .jb-otp-input {
+    width: 42px;
+    height: 52px;
+    font-size: 20px;
+    border-radius: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  .jb-otp-container {
+    gap: 5px;
+  }
+
+  .jb-otp-input {
+    width: 36px;
+    height: 46px;
+    font-size: 18px;
+    border-radius: 11px;
   }
 }
 </style>

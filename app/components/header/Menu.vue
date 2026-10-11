@@ -1,78 +1,111 @@
 <template>
-  <nav class="w-full bg-white  relative z-40">
-    <div class="mx-auto">
-      <div class="flex items-center justify-between h-16">
+  <nav class="w-full">
+    <!-- ===== دسکتاپ ===== -->
+    <ul class="hidden md:flex items-center gap-1 justify-end">
+      <li
+        v-for="item in menuItems"
+        :key="item.id"
+        class="group relative"
+      >
+        <NuxtLink
+          :to="item.link || '#'"
+          class="jb-nav-link inline-flex items-center gap-1"
+          :class="{ active: isActive(item.link) }"
+        >
+          {{ item.title }}
+          <svg
+            v-if="item.children?.length"
+            class="w-3 h-3 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+          </svg>
+        </NuxtLink>
 
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex space-x-8 space-x-reverse">
-          <ul class="flex flex-row gap-4">
-            <li v-for="item in menuItems" :key="item.id" class="group relative">
-              <!-- Parent Item -->
-              <NuxtLink :to="item.link || '#'" :class="[
-                'flex items-center text-sm font-medium transition-colors py-5',
-                isActive(item.link)
-                  ? 'text-indigo-600 font-bold '
-                  : ' hover:text-indigo-600 ',
-              ]">
-                {{ item.title }}
-
-              </NuxtLink>
-
-              <!-- Dropdown / Submenu -->
-              <div v-if="item.children && item.children.length > 0"
-                class="absolute top-full right-0 w-56 bg-white border border-gray-100 rounded-b-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 dark:bg-gray-800 dark:border-gray-700">
-                <ul class="py-2">
-                  <li v-for="sub in item.children" :key="sub.id">
-                    <NuxtLink :to="sub.link || '#'" :class="[
-                      'block px-4 py-2 text-sm',
-                      isActive(sub.link)
-                        ? 'bg-indigo-50 text-indigo-600 dark:bg-gray-700 dark:text-indigo-400'
-                        : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 dark:text-gray-300 dark:hover:bg-gray-700',
-                    ]">
-                      {{ sub.title }}
-                    </NuxtLink>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <!-- v-show="mobileMenuOpen" -->
-    <div class="md:hidden bg-white border-t border-gray-200 dark:bg-gray-900 dark:border-gray-800">
-      <ul class="px-4 py-2 space-y-1">
-        <li v-for="item in menuItems" :key="item.id">
-          <div class="flex flex-col">
-            <div class="flex justify-between items-center w-full">
-              <NuxtLink :to="item.link || '#'" :class="[
-                'block py-3 text-base font-medium',
-                isActive(item.link)
-                  ? 'text-indigo-600 font-bold dark:text-indigo-400'
-                  : 'text-gray-700 dark:text-gray-200',
-              ]" @click="props.menuToggleFunction()">
-                <!-- @click="!item.children?.length && (mobileMenuOpen = false)" -->
-                {{ item.title }}
-              </NuxtLink>
-            </div>
-
-            <ul v-if="item.children && item.children.length > 0" v-show="activeMobileSub === item.id"
-              class="pr-4 border-r-2 border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 mb-2 rounded-lg">
+        <!-- زیرمنو دسکتاپ -->
+        <div
+          v-if="item.children?.length"
+          class="absolute top-full right-0 pt-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[1500]"
+        >
+          <div class="jb-submenu">
+            <ul class="space-y-0.5">
               <li v-for="sub in item.children" :key="sub.id">
-                <NuxtLink :to="sub.link || '#'" :class="[
-                  'block py-2 text-sm',
-                  isActive(sub.link)
-                    ? 'text-indigo-600 font-semibold dark:text-indigo-400'
-                    : 'text-gray-600 hover:text-indigo-600 dark:text-gray-400',
-                ]" @click="mobileMenuOpen = false">
+                <NuxtLink
+                  :to="sub.link || '#'"
+                  class="jb-submenu-item"
+                  :class="{ active: isActive(sub.link) }"
+                >
                   {{ sub.title }}
                 </NuxtLink>
               </li>
             </ul>
           </div>
-        </li>
-      </ul>
-    </div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- ===== موبایل ===== -->
+    <ul class="md:hidden flex flex-col gap-1">
+      <li v-for="item in menuItems" :key="item.id">
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between">
+            <NuxtLink
+              :to="item.link || '#'"
+              class="flex-1 py-3 text-base font-bold rounded-xl px-3 transition-colors"
+              :class="
+                isActive(item.link)
+                  ? 'text-[color:var(--jb-fuchsia)] bg-[color:var(--jb-pink-100)]'
+                  : 'text-[color:var(--jb-text)] hover:bg-[color:var(--jb-pink-50)]'
+              "
+              @click="!item.children?.length && props.menuToggleFunction()"
+            >
+              {{ item.title }}
+            </NuxtLink>
+
+            <button
+              v-if="item.children?.length"
+              @click="toggleMobileSubmenu(item.id)"
+              class="jb-icon-btn p-2 mr-1"
+              :aria-expanded="activeMobileSub === item.id"
+            >
+              <svg
+                class="w-4 h-4 text-[color:var(--jb-fuchsia)] transition-transform"
+                :class="{ 'rotate-180': activeMobileSub === item.id }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- زیرمنو موبایل -->
+          <ul
+            v-if="item.children?.length"
+            v-show="activeMobileSub === item.id"
+            class="mt-1 mr-3 pr-3 border-r-2 border-dashed border-[color:var(--jb-pink-300)] flex flex-col gap-0.5"
+          >
+            <li v-for="sub in item.children" :key="sub.id">
+              <NuxtLink
+                :to="sub.link || '#'"
+                class="block py-2 px-3 text-sm font-semibold rounded-lg transition-colors"
+                :class="
+                  isActive(sub.link)
+                    ? 'text-[color:var(--jb-fuchsia)] bg-[color:var(--jb-pink-100)]'
+                    : 'text-[color:var(--jb-text-soft)] hover:bg-[color:var(--jb-pink-50)]'
+                "
+                @click="props.menuToggleFunction()"
+              >
+                {{ sub.title }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
   </nav>
 </template>
 
@@ -84,48 +117,42 @@ import { useApi } from "@/composables/api/useApi";
 const props = defineProps({
   menuToggleFunction: {
     type: Function,
-    default: () => { },
+    default: () => {},
   },
 });
 
 const route = useRoute();
-const mobileMenuOpen = ref(false);
 const activeMobileSub = ref(null);
 
 const { getBase } = useApi();
 
-const { data: baseResponse, error: baseError } = await useAsyncData(
+const { data: baseResponse } = await useAsyncData(
   "layout-base-data",
   () => getBase(),
-  { server: true, lazy: true },
+  { server: true, lazy: true }
 );
 
 const resolveLink = (item) => {
   if (item?.link) return item.link;
-
   const title = (item?.title || "").trim();
-
   if (title === "درباره ما") return "/about-us";
   if (title === "تماس با ما") return "/contact-us";
-
   if (item?.id) return `/products?category_ids=${item.id}`;
-
   return "#";
 };
 
 const normalizeMenus = (rawMenus) => {
   if (!Array.isArray(rawMenus)) return [];
-
   return rawMenus.map((m) => ({
     id: m.id ?? m.title,
     title: m.title ?? "",
     link: resolveLink(m),
     children: Array.isArray(m.children)
       ? m.children.map((c) => ({
-        id: c.id ?? c.title,
-        title: c.title ?? "",
-        link: resolveLink(c),
-      }))
+          id: c.id ?? c.title,
+          title: c.title ?? "",
+          link: resolveLink(c),
+        }))
       : [],
   }));
 };
@@ -144,9 +171,8 @@ const isActive = (link) => {
 watch(
   () => route.fullPath,
   () => {
-    mobileMenuOpen.value = false;
     activeMobileSub.value = null;
-  },
+  }
 );
 
 const toggleMobileSubmenu = (id) => {
