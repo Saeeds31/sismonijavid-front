@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link @click="saveLocation()" :to="`/product/${product.id}`" class="jb-product-card group"
+  <nuxt-link @click="saveLocation()" :to="`/product/${product.slug??product.id}`" class="jb-product-card group"
     :class="{ 'is-unavailable': product.status === 'unpublished' }">
     <!-- ===== تصویر با پدینگ داخل کارت ===== -->
     <div class="jb-product-image-wrap">
@@ -69,7 +69,7 @@
         </div>
 
         <!-- دکمه مستطیلی -->
-        <button @click.stop.prevent="goToProduct" class="jb-product-btn" :disabled="product.status === 'unpublished'">
+        <button  class="jb-product-btn" :disabled="product.status === 'unpublished'">
           {{ product.status === 'unpublished' ? 'اطلاع' : 'مشاهده محصول' }}
         </button>
       </div>
@@ -107,9 +107,7 @@ const toggleFavorite = async () => {
   if (!wasAdded) emit("favorite-removed", props.product.id);
 };
 
-const goToProduct = () => {
-  router.push(`/product/${props.product.id}`);
-};
+
 
 function saveLocation() {
   if (props.saveLoc) {

@@ -2,6 +2,7 @@
   <Section class="jb-tabs-section flex flex-col lg:flex-row gap-4 mt-8">
     <div class="w-full">
       <ProductTabsSectionTab
+      :productId="props.productId"
         :specifications="props.specifications"
         :description="props.description"
       />

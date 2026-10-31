@@ -34,35 +34,21 @@
 
     <!-- ===== لیست سفارشات ===== -->
     <div v-else class="jb-orders-list">
-      <div
-        v-for="order in orders"
-        :key="order.id"
-        class="jb-order-card"
-        :class="`status-${getStatusClass(order.status)}`"
-      >
+      <div v-for="order in orders" :key="order.id" class="jb-order-card"
+        :class="`status-${getStatusClass(order.status)}`">
         <div class="jb-order-card-inner">
           <!-- ===== بالای کارت: وضعیت + مشاهده ===== -->
           <div class="jb-order-top">
             <div class="jb-order-status">
-              <span
-                class="jb-order-status-icon"
-                :class="`status-icon-${getStatusClass(order.status)}`"
-              >
+              <span class="jb-order-status-icon" :class="`status-icon-${getStatusClass(order.status)}`">
                 <component :is="getStatusIcon(order.status)" class="w-4 h-4" />
               </span>
-              <span
-                class="jb-order-status-text"
-                :class="`status-text-${getStatusClass(order.status)}`"
-              >
+              <span class="jb-order-status-text" :class="`status-text-${getStatusClass(order.status)}`">
                 {{ getStatusText(order.status) }}
               </span>
             </div>
 
-            <NuxtLink
-              :to="`order/${order.id}`"
-              class="jb-order-view-btn"
-              aria-label="مشاهده جزئیات"
-            >
+            <NuxtLink :to="`order/${order.id}`" class="jb-order-view-btn" aria-label="مشاهده جزئیات">
               <ChevronLeft class="w-4 h-4" />
             </NuxtLink>
           </div>
@@ -106,20 +92,14 @@
           <!-- ===== محصول ===== -->
           <div v-if="order.items.length" class="jb-order-product">
             <div class="jb-order-product-img-wrap">
-              <img
-                :src="$getImageUrl(order.items[0].product.main_image)"
-                :alt="order.items[0].product.title"
-                class="jb-order-product-img"
-              />
+              <img :src="$getImageUrl(order.items[0].product.main_image)" :alt="order.items[0].product.title"
+                class="jb-order-product-img" />
             </div>
             <div class="jb-order-product-info">
               <span class="jb-order-product-title">
                 {{ order.items[0].product.title }}
               </span>
-              <span
-                v-if="order.items.length > 1"
-                class="jb-order-product-more"
-              >
+              <span v-if="order.items.length > 1" class="jb-order-product-more">
                 و {{ order.items.length - 1 }} محصول دیگر
               </span>
             </div>
@@ -223,6 +203,19 @@ function getStatusClass(status) {
       return "muted";
   }
 }
+useSeoMeta({
+  title: () => 'سفارشات پنل کاربری | سیسمونی جاوید',
+  description: 'لیست سفارشات کاربر در پنل اختصاصی',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/panel/orders' }],
+  // 🔹 جلوگیری از ایندکس شدن با متا تگ اضافی برای اطمینان بیشتر
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet' },
+  ],
+})
 </script>
 
 <style scoped>
@@ -285,8 +278,13 @@ function getStatusClass(status) {
   box-shadow: 0 0 0 3px #fff;
 }
 
-.jb-divider::before { right: -4px; }
-.jb-divider::after  { left: -4px; }
+.jb-divider::before {
+  right: -4px;
+}
+
+.jb-divider::after {
+  left: -4px;
+}
 
 /* ===== حالت‌ها ===== */
 .jb-state-block {
@@ -317,8 +315,15 @@ function getStatusClass(status) {
 }
 
 @keyframes jbEmptyFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 /* =========================================================
@@ -450,10 +455,21 @@ function getStatusClass(status) {
   font-weight: 900;
 }
 
-.status-text-cancelled { color: #c9184a; }
-.status-text-pending   { color: #b45309; }
-.status-text-success   { color: #16a34a; }
-.status-text-muted     { color: var(--jb-text-muted); }
+.status-text-cancelled {
+  color: #c9184a;
+}
+
+.status-text-pending {
+  color: #b45309;
+}
+
+.status-text-success {
+  color: #16a34a;
+}
+
+.status-text-muted {
+  color: var(--jb-text-muted);
+}
 
 /* دکمه مشاهده */
 .jb-order-view-btn {

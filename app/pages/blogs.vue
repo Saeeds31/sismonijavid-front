@@ -65,24 +65,16 @@
 
         <!-- خط بریده‌بریده -->
         <div class="jb-divider"></div>
-    
+
         <!-- ===== گرید مقالات ===== -->
         <div v-if="gridBlogs.length > 0" class="jb-blogs-grid" id="blogsList">
-          <HomeArticlesBigCard
-            v-for="blog in gridBlogs"
-            :key="blog.id"
-            :card="blog"
-          />
+          <HomeArticlesBigCard v-for="blog in gridBlogs" :key="blog.id" :card="blog" />
         </div>
 
         <!-- ===== Pagination ===== -->
-        <!-- <ProductsPagination
-          v-if="pagination"
-          v-model="currentPage"
-          :total-items="pagination.total"
-          :items-per-page="pagination.per_page"
-          class="mt-10"
-        /> -->
+        <ProductsPagination v-if="pagination" :model-value="currentPage" :total-pages="totalPages" class="mt-10"
+          @update:model-value="goToPage" />
+
       </div>
 
       <!-- ===== خالی ===== -->
@@ -102,36 +94,107 @@
 
 <script setup>
 import { computed, watch, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useBlogStore } from "~/store/blog";
 import { useApi } from "@/composables/api/useApi";
 
 const blogStore = useBlogStore();
 const { getBlogs } = useApi();
+const route = useRoute();
+const router = useRouter();
 
-const currentPage = ref(1);
-
-const { pending, error, refresh } = await useAsyncData("blogs", async () => {
-  const response = await getBlogs({ page: currentPage.value });
-  const fetchedData = response?.data || response;
-
-  blogStore.setBlogs(fetchedData);
-  return fetchedData;
+// 🔹 خواندن شماره صفحه از URL (پیش‌فرض ۱)
+const currentPage = computed(() => {
+  const page = Number(route.query.page);
+  return page > 0 ? page : 1;
 });
+
+// 🔹 دریافت داده اولیه بر اساس صفحه فعلی URL
+const { pending, error, refresh } = await useAsyncData(
+  () => `blogs-page-${currentPage.value}`,
+  async () => {
+    const response = await getBlogs({ page: currentPage.value });
+    const fetchedData = response?.data || response;
+    blogStore.setBlogs(fetchedData);
+    return fetchedData;
+  },
+  {
+    watch: [currentPage],
+  }
+);
 
 const blogs = computed(() => blogStore.blogs || []);
 const pagination = computed(() => blogStore.pagination);
-
-/* اولین مقاله به عنوان Featured، بقیه در گرید */
 const gridBlogs = computed(() => blogs.value);
+const totalPages = computed(() => pagination.value?.last_page || 1);
 
-watch(currentPage, async () => {
-  const response = await getBlogs({ page: currentPage.value });
-  const fetchedData = response?.data || response;
-  blogStore.setBlogs(fetchedData);
+// 🔹 تغییر صفحه با به‌روزرسانی URL (نه فقط تغییر ref)
+const goToPage = (page) => {
+  if (page < 1 || page > totalPages.value) return;
+  router.push({ query: { ...route.query, page: page === 1 ? undefined : page } });
+};
 
-  document
-    .getElementById("blogsList")
-    ?.scrollIntoView({ behavior: "smooth" });
+// 🔹 اسکرول به لیست بعد از تغییر صفحه
+watch(currentPage, () => {
+  if (process.client) {
+    document
+      .getElementById("blogsList")
+      ?.scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+// ============ SEO ============
+const siteUrl = "https://sismonijavid.ir";
+const currentPageUrl = computed(() => {
+  const base = `${siteUrl}/blogs`;
+  return currentPage.value > 1 ? `${base}?page=${currentPage.value}` : base;
+});
+
+useSeoMeta({
+  title: () =>
+    currentPage.value > 1
+      ? `مقالات سیسمونی جاوید - صفحه ${currentPage.value} | راهنمای خرید و نگهداری لوازم نوزاد`
+      : "مقالات سیسمونی جاوید | راهنمای خرید و نگهداری لوازم نوزاد",
+  description:
+    "مجموعه مقالات آموزشی و راهنمای خرید سیسمونی، لباس نوزاد و لوازم ایمنی. نکات و تجربه‌های ارزشمند برای والدین از فروشگاه سیسمونی جاوید.",
+  ogTitle: () =>
+    currentPage.value > 1
+      ? `مقالات سیسمونی جاوید - صفحه ${currentPage.value}`
+      : "مقالات سیسمونی جاوید",
+  ogDescription: "راهنماها و نکات کاربردی برای والدین در زمینه سیسمونی و لوازم نوزاد.",
+  ogImage: "https://sismonijavid.ir/_nuxt/logo.BGpC-RES.png",
+  ogUrl: () => currentPageUrl.value,
+  ogType: "website",
+  twitterCard: "summary_large_image",
+  robots: "index, follow",
+});
+
+useHead({
+  link: [
+    {
+      rel: "canonical",
+      href: () => currentPageUrl.value,
+    },
+  ],
+  script: [
+    {
+      type: "application/ld+json",
+      key: "blogs-list-jsonld",
+      innerHTML: computed(() => {
+        if (!blogs.value?.length) return null;
+
+        return JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: blogs.value.map((blog, index) => ({
+            "@type": "ListItem",
+            position: (currentPage.value - 1) * (pagination.value?.per_page || 12) + index + 1,
+            url: `${siteUrl}/blog/${blog.slug || blog.id}`,
+          })),
+        });
+      }),
+    },
+  ],
 });
 </script>
 
@@ -222,8 +285,13 @@ watch(currentPage, async () => {
   box-shadow: 0 0 0 3px #fff;
 }
 
-.jb-divider::before { right: -4px; }
-.jb-divider::after  { left: -4px; }
+.jb-divider::before {
+  right: -4px;
+}
+
+.jb-divider::after {
+  left: -4px;
+}
 
 /* =========================================================
    Featured Blog
@@ -319,13 +387,27 @@ watch(currentPage, async () => {
   animation: jbShimmer 1.6s ease-in-out infinite;
 }
 
-.jb-skeleton-line-lg { width: 85%; height: 18px; }
-.jb-skeleton-line-md { width: 100%; }
-.jb-skeleton-line-sm { width: 60%; }
+.jb-skeleton-line-lg {
+  width: 85%;
+  height: 18px;
+}
+
+.jb-skeleton-line-md {
+  width: 100%;
+}
+
+.jb-skeleton-line-sm {
+  width: 60%;
+}
 
 @keyframes jbShimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* =========================================================
@@ -365,8 +447,15 @@ watch(currentPage, async () => {
 }
 
 @keyframes jbEmptyFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .jb-error-title,
@@ -376,7 +465,9 @@ watch(currentPage, async () => {
   color: var(--jb-text);
 }
 
-.jb-error-title { color: #c9184a; }
+.jb-error-title {
+  color: #c9184a;
+}
 
 .jb-error-desc,
 .jb-empty-desc {

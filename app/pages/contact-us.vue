@@ -1,19 +1,11 @@
 <template>
   <main class="jb-contact-page">
     <div class="container mx-auto px-4 md:px-8 lg:px-12 xl:px-28">
-      <SharedBreadCrumb
-        class="mb-8"
-        :items="[{ label: 'تماس با ما', href: '/contact-us' }]"
-      />
+      <SharedBreadCrumb class="mb-8" :items="[{ label: 'تماس با ما', href: '/contact-us' }]" />
 
       <ContactHeroSection :contact-info="contactInfo" />
 
-      <ContactFormSection
-        class="mt-16"
-        :model="form"
-        :loading="loading"
-        @submit="submitForm"
-      />
+      <ContactFormSection class="mt-16" :model="form" :loading="loading" @submit="submitForm" />
     </div>
   </main>
 </template>
@@ -131,6 +123,54 @@ const submitForm = async () => {
     loading.value = false;
   }
 };
+useSeoMeta({
+  title: 'تماس با سیسمونی جاوید | آدرس و شماره تماس فروشگاه در گرگان',
+  description: 'راه‌های ارتباط با فروشگاه سیسمونی جاوید. آدرس: گرگان، خیابان سرخواجه، مجتمع آفتاب. شماره تماس: ۰۹۳۷۵۰۱۵۷۶۹. ساعات کاری فروشگاه و پشتیبانی.',
+  ogTitle: 'تماس با سیسمونی جاوید',
+  ogDescription: 'آدرس فروشگاه، شماره تماس و فرم ارتباط با سیسمونی جاوید در گرگان.',
+  ogUrl: 'https://sismonijavid.ir/contact-us',
+  ogType: 'website',
+  robots: 'index, follow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/contact-us' }],
+  script: [
+    {
+      type: 'application/ld+json',
+      key: 'contact-jsonld',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ContactPage',
+        'mainEntity': {
+          '@type': 'LocalBusiness',
+          'name': 'سیسمونی جاوید',
+          'url': 'https://sismonijavid.ir',
+          'telephone': '+989375015769',
+          'address': {
+            '@type': 'PostalAddress',
+            'streetAddress': 'خیابان سرخواجه، مجتمع آفتاب، طبقه همکف',
+            'addressLocality': 'گرگان',
+            'addressRegion': 'گلستان',
+            'addressCountry': 'IR',
+          },
+          'openingHoursSpecification': [
+            {
+              '@type': 'OpeningHoursSpecification',
+              'dayOfWeek': ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+              'opens': '09:00',
+              'closes': '21:00',
+            },
+          ],
+          'sameAs': [
+            'https://t.me/sismonijavid',
+            'https://instagram.com/sismonijavid',
+          ],
+        },
+      }),
+    },
+  ],
+})
 </script>
 
 <style scoped>

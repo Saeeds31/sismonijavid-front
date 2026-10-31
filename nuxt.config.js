@@ -12,7 +12,11 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  css: ["~/assets/css/main.css", "~/assets/css/fonts.css","~/assets/css/theme.css"],
+  css: [
+    "~/assets/css/main.css",
+    "~/assets/css/fonts.css",
+    "~/assets/css/theme.css",
+  ],
 
   app: {
     head: {
@@ -31,6 +35,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: "https://api.sismonijavid.ir",
+      siteUrl: "https://sismonijavid.ir",
+      siteImageUrl: "https://api.sismonijavid.ir/storage_public",
     },
   },
 

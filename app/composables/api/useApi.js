@@ -20,6 +20,7 @@ export const useApi = () => {
         min_price: params.min_price ?? undefined,
         max_price: params.max_price ?? undefined,
         category_ids: params.category_ids ?? undefined,
+        category_slug: params.category_slug ?? undefined,
         weight: params.weight ?? undefined,
         sort: params.sort_by ?? undefined,
         page: params.page ?? undefined,

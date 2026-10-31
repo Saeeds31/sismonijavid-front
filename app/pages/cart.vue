@@ -47,28 +47,16 @@
           </div>
 
           <!-- آیتم‌ها -->
-          <div
-            v-for="item in cartItems"
-            :key="item.id || item.variant_id"
-            class="jb-cart-row"
-          >
+          <div v-for="item in cartItems" :key="item.id || item.variant_id" class="jb-cart-row">
             <!-- تصویر + عنوان -->
             <div class="jb-cart-row-product">
               <div class="jb-cart-row-img-wrap">
-                <img
-                  v-if="item.image"
-                  :src="resolveImage(item.image)"
-                  :alt="item.title"
-                  class="jb-cart-row-img"
-                />
+                <img v-if="item.image" :src="resolveImage(item.image)" :alt="item.title" class="jb-cart-row-img" />
                 <span v-else class="jb-cart-row-img-placeholder">📦</span>
               </div>
 
               <div class="jb-cart-row-info">
-                <nuxt-link
-                  :to="`/product/${item.product_id}`"
-                  class="jb-cart-row-title"
-                >
+                <nuxt-link :to="`/product/${item.product_id}`" class="jb-cart-row-title">
                   {{ item.title }}
                 </nuxt-link>
 
@@ -125,19 +113,11 @@
             <div class="jb-cart-row-cell">
               <span class="jb-cell-label">تعداد:</span>
               <div class="jb-qty">
-                <button
-                  @click="increaseQuantity(item.id || item.variant_id)"
-                  class="jb-qty-btn"
-                  aria-label="افزایش"
-                >
+                <button @click="increaseQuantity(item.id || item.variant_id)" class="jb-qty-btn" aria-label="افزایش">
                   <Plus :size="14" />
                 </button>
                 <span class="jb-qty-value">{{ item.quantity }}</span>
-                <button
-                  @click="decreaseQuantity(item.id || item.variant_id)"
-                  class="jb-qty-btn"
-                  aria-label="کاهش"
-                >
+                <button @click="decreaseQuantity(item.id || item.variant_id)" class="jb-qty-btn" aria-label="کاهش">
                   <Minus :size="14" />
                 </button>
               </div>
@@ -160,11 +140,7 @@
             <!-- حذف -->
             <div class="jb-cart-row-cell jb-cell-remove">
               <span class="jb-cell-label">حذف آیتم:</span>
-              <button
-                @click="removeItem(item.id || item.variant_id)"
-                class="jb-cart-remove-btn"
-                aria-label="حذف"
-              >
+              <button @click="removeItem(item.id || item.variant_id)" class="jb-cart-remove-btn" aria-label="حذف">
                 <Trash2 :size="18" />
               </button>
             </div>
@@ -184,18 +160,9 @@
             </div>
 
             <div class="jb-coupon-input-row">
-              <input
-                v-model="couponCode"
-                class="jb-coupon-input"
-                type="text"
-                placeholder="کد تخفیف خود را وارد کنید ..."
-                :disabled="isCheckingCoupon"
-              />
-              <button
-                type="submit"
-                class="jb-btn-linear jb-coupon-btn"
-                :disabled="isCheckingCoupon"
-              >
+              <input v-model="couponCode" class="jb-coupon-input" type="text"
+                placeholder="کد تخفیف خود را وارد کنید ..." :disabled="isCheckingCoupon" />
+              <button type="submit" class="jb-btn-linear jb-coupon-btn" :disabled="isCheckingCoupon">
                 {{ isCheckingCoupon ? "بررسی..." : "اعمال" }}
               </button>
             </div>
@@ -255,10 +222,7 @@
         </div>
 
         <!-- ============ رزروهای فعال ============ -->
-        <div
-          v-if="isLoggedIn && (isLoadingReservations || activeReservations.length > 0)"
-          class="jb-reservations-box"
-        >
+        <div v-if="isLoggedIn && (isLoadingReservations || activeReservations.length > 0)" class="jb-reservations-box">
           <!-- Loading -->
           <div v-if="isLoadingReservations" class="jb-res-loading">
             <div class="jb-res-spinner"></div>
@@ -283,14 +247,9 @@
             </div>
 
             <div class="jb-res-grid">
-              <button
-                v-for="reservation in activeReservations"
-                :key="reservation.id"
-                type="button"
-                @click="selectReservation(reservation)"
-                class="jb-res-card"
-                :class="{ 'is-selected': selectedReservation === reservation.id }"
-              >
+              <button v-for="reservation in activeReservations" :key="reservation.id" type="button"
+                @click="selectReservation(reservation)" class="jb-res-card"
+                :class="{ 'is-selected': selectedReservation === reservation.id }">
                 <div class="jb-res-card-top">
                   <div class="jb-res-card-info">
                     <!-- رادیو -->
@@ -327,12 +286,8 @@
 
             <!-- بدون رزرو -->
             <div class="jb-res-no-reservation">
-              <button
-                type="button"
-                @click="selectReservation(null)"
-                class="jb-res-no-btn"
-                :class="{ 'is-active': selectedReservation === null }"
-              >
+              <button type="button" @click="selectReservation(null)" class="jb-res-no-btn"
+                :class="{ 'is-active': selectedReservation === null }">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                 </svg>
@@ -441,7 +396,7 @@ const formatReservationDate = (date) => {
   }
 };
 
-watch(() => cartData.value?.items, () => {}, { deep: true });
+watch(() => cartData.value?.items, () => { }, { deep: true });
 
 onMounted(async () => {
   await loadActiveReservations();
@@ -625,7 +580,7 @@ const cartItems = computed(() => {
   return normalized;
 });
 
-watch(cartItems, () => {}, { deep: true, immediate: true });
+watch(cartItems, () => { }, { deep: true, immediate: true });
 
 const subtotal = computed(() => {
   return cartData.value?.summary?.subtotal || 0;
@@ -803,6 +758,16 @@ const goToShipping = () => {
     navigateTo("/shipping");
   }
 };
+
+useSeoMeta({
+  title: 'سبد خرید | سیسمونی جاوید',
+  description: 'مشاهده و مدیریت سبد خرید در فروشگاه سیسمونی جاوید.',
+  robots: 'noindex, nofollow', // 🔴 مهم‌ترین خط
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/cart' }],
+})
 </script>
 
 <style scoped>
@@ -859,8 +824,15 @@ const goToShipping = () => {
 }
 
 @keyframes jbEmptyFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .jb-state-title {
@@ -1388,7 +1360,9 @@ const goToShipping = () => {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* هدر */

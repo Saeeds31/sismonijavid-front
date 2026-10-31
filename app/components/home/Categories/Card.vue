@@ -1,7 +1,7 @@
 <!-- app/components/home/Categories/Card.vue -->
 <template>
   <NuxtLink
-    :to="item.id == 0 ? '/products' : `/products?category_ids=${item.id}`"
+    :to="item.id == 0 ? '/products' : `/products/${item.slug??item.id}`"
     class="jb-cat-card group"
   >
     <!-- تصویر یا گرادیان پس‌زمینه -->

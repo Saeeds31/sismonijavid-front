@@ -19,7 +19,13 @@
         <div class="jb-advantages-grid">
           <div v-for="item in advantages" :key="item.title" class="jb-advantage-card">
             <div class="jb-advantage-icon">
-              <img :src="item.icon" :alt="item.title" />
+              <img v-if="!item.enamad" :src="item.icon" :alt="item.title" />
+              <a referrerpolicy='origin' v-else target='_blank'
+                href='https://trustseal.enamad.ir/?id=702342&Code=u8S0xaRkdoZnDjpDmRlQLwXDczeitXnV'><img
+                  referrerpolicy='origin'
+                  src='https://trustseal.enamad.ir/logo.aspx?id=702342&Code=u8S0xaRkdoZnDjpDmRlQLwXDczeitXnV' alt=''
+                  style='cursor:pointer' code='u8S0xaRkdoZnDjpDmRlQLwXDczeitXnV'></a>
+
             </div>
             <h4 class="jb-advantage-title">{{ item.title }}</h4>
             <p class="jb-advantage-subtitle">{{ item.subtitle }}</p>
@@ -148,11 +154,10 @@ const footerNote = computed(() => {
 const advantages = [
   { title: "ارسال سریع", subtitle: "۳ تا ۷ روز کاری", icon: "/icons/delivery.svg" },
   { title: "پشتیبانی", subtitle: "در روزهای کاری", icon: "/icons/support.svg" },
-  { title: "قیمت مناسب", subtitle: "خرید بدون واسطه", icon: "/icons/price.svg" },
+  { title: "قیمت مناسب", subtitle: "خرید بدون واسطه", icon: "/icons/quality.svg" },
   { title: "پرداخت امن", subtitle: "درگاه بانکی", icon: "/icons/payment.svg" },
-  { title: "ضمانت کیفیت", subtitle: "خرید با اطمینان", icon: "/icons/quality.svg" },
+  { title: "ضمانت کیفیت", subtitle: "خرید با اطمینان", icon: "/icons/quality.svg", enamad: true },
 ];
-
 /* ============================================================
    دسترسی سریع - از منوها یا fallback
 ============================================================ */
@@ -285,13 +290,13 @@ const scrollTop = () => {
   --jb-neutral-300: #9CA3AF;
   --jb-neutral-200: #D1D5DB;
   --jb-neutral-100: #E5E7EB;
-  --jb-neutral-50:  #F3F4F6;
+  --jb-neutral-50: #F3F4F6;
 
   /* لهجه سبز لوگو */
   --jb-accent-light: #A8D5BD;
-  --jb-accent:       #7DBFA3;
-  --jb-accent-dark:  #5FA689;
-  --jb-accent-deep:  #4A8F73;
+  --jb-accent: #7DBFA3;
+  --jb-accent-dark: #5FA689;
+  --jb-accent-deep: #4A8F73;
 
   position: relative;
   background: linear-gradient(180deg, #1A1D1F 0%, #22262A 50%, #2A2E31 100%);
@@ -450,8 +455,13 @@ const scrollTop = () => {
   box-shadow: 0 0 0 3px #1A1D1F;
 }
 
-.jb-footer-divider::before { right: -4px; }
-.jb-footer-divider::after  { left: -4px; }
+.jb-footer-divider::before {
+  right: -4px;
+}
+
+.jb-footer-divider::after {
+  left: -4px;
+}
 
 /* =========================================================
    ستون‌ها

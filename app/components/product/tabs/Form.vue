@@ -64,7 +64,10 @@ const { loginModal } = useAuth();
 const { postProductComment } = useApi();
 
 const emit = defineEmits(["submit"]);
+const props = defineProps({
+  productId: { type: [String, Number], required: true },
 
+});
 const formData = ref({
   name: "",
   rating: 0,
@@ -100,8 +103,8 @@ const submitComment = async () => {
     fd.append('content', formData.value.text);
     fd.append('parent_id', '');
     try {
-      await postProductComment(route.params.id, fd);
-      toast.success("کامنت شما با موفقیت ثبت شد", {
+      await postProductComment(props.productId, fd);
+      toast.success("کامنت شما با موفقیت ثبت شد و بعد از تایید نمایش داده خواهد شد", {
         autoClose: 3000,
       });
       resetForm();

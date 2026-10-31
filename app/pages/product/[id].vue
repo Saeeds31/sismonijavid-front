@@ -8,6 +8,7 @@ const productId = computed(() => route.params.id);
 const productStore = useProductStore();
 const wishlistData = ref(null);
 const commentsData = ref(null);
+console.log('PARAM:', route.params.id)
 
 const { data: productData, error: productError, refresh } = useAsyncData(
   () => `product-detail-${productId.value}`,
@@ -133,6 +134,8 @@ const product = computed(() => {
     video: core.video,
     description: core.description,
     price: core.price,
+    meta_title:core.meta_title,
+    meta_description:core.meta_description,
     final_price: core.final_price,
     // 🔹 اصلاح: بر اساس موجودی واقعی تنوع‌ها
     inStock: !isCompletelyOutOfStock.value,
@@ -223,6 +226,166 @@ watch(
   (newValue) => { },
   { immediate: true },
 );
+// ============ SEO ============
+const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl   // از nuxt.config تعریف کن
+const siteImageUrl = config.public.siteImageUrl   // از nuxt.config تعریف کن
+
+const siteName = 'سیسمونی جاوید' // بهتره از config بیاد
+
+// آدرس امن برای تصاویر
+const absoluteUrl = (path) => {
+  if (!path) return `${siteImageUrl}/og-default.jpg`
+  if (path.startsWith('http')) return path
+  return `${siteImageUrl}/${path.replace(/^\/+/, '')}`
+}
+
+// متن خالص از HTML برای meta description
+const stripHtml = (html) => {
+  if (!html) return ''
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+// قیمت‌ها به عدد
+const numericPrice = computed(() => Number(currentPrice.value) || 0)
+const numericOldPrice = computed(() => Number(oldPrice.value) || 0)
+
+// درصد تخفیف
+const discountPercent = computed(() => {
+  if (numericOldPrice.value <= numericPrice.value) return 0
+  return Math.round(
+    ((numericOldPrice.value - numericPrice.value) / numericOldPrice.value) * 100
+  )
+})
+
+// canonical با کوئری تمیز (بدون tracking)
+const canonicalUrl = computed(() =>
+  productId.value ? `${siteUrl}/product/${productId.value}` : siteUrl
+)
+
+// متا تگ‌ها
+useSeoMeta({
+  title: () => product.value?.meta_title,
+  description: () => {
+    const desc = product.value?.meta_description || ''
+    return desc.length > 160 ? desc.slice(0, 157) + '...' : desc
+  },
+  ogTitle: () => product.value?.meta_title || 'محصول',
+  ogDescription: () => stripHtml(product.value?.meta_description || '').slice(0, 200),
+  ogImage: () => absoluteUrl(product.value?.images?.[0]),
+  ogUrl: () => canonicalUrl.value,
+  ogType: 'product',
+  ogSiteName: siteName,
+  ogLocale: 'fa_IR',
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => product.value?.meta_title || '',
+  twitterDescription: () => stripHtml(product.value?.meta_description || '').slice(0, 200),
+  twitterImage: () => absoluteUrl(product.value?.images?.[0]),
+  robots: 'index, follow, max-image-preview:large',
+})
+
+
+
+// ============ Structured Data (JSON-LD) ============
+useHead({
+    link: [
+    { rel: 'canonical', href: canonicalUrl },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      key: 'product-jsonld',
+      innerHTML: computed(() => {
+        if (!product.value) return null
+        const p = product.value
+
+        const availability = p.inStock
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock'
+
+        const jsonLd = {
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: p.title,
+          image: p.images.map(absoluteUrl),
+          description: stripHtml(p.description).slice(0, 500),
+          sku: String(p.id),
+          brand: {
+            '@type': 'Brand',
+            name: siteName,
+          },
+          offers: {
+            '@type': 'Offer',
+            url: canonicalUrl.value,
+            priceCurrency: 'IRR', // تومان نیست! ریال. اگه تومانه از واحد دیگه استفاده کن
+            price: numericPrice.value,
+            availability,
+            itemCondition: 'https://schema.org/NewCondition',
+            seller: {
+              '@type': 'Organization',
+              name: siteName,
+            },
+            ...(numericOldPrice.value > numericPrice.value && {
+              priceSpecification: {
+                '@type': 'UnitPriceSpecification',
+                price: numericPrice.value,
+                priceCurrency: 'IRR',
+              },
+            }),
+          },
+          ...(p.variants?.length > 1 && {
+            hasVariant: p.variants.map((v) => ({
+              '@type': 'Product',
+              name: `${p.title} - ${v.values?.map(x => x.value).join(' / ') || ''}`,
+              sku: String(v.id),
+              offers: {
+                '@type': 'Offer',
+                price: Number(v.final_price),
+                priceCurrency: 'IRR',
+                availability: v.is_available && v.stock > 0
+                  ? 'https://schema.org/InStock'
+                  : 'https://schema.org/OutOfStock',
+                url: canonicalUrl.value,
+              },
+            })),
+          }),
+        }
+
+        // Breadcrumb
+        const breadcrumbLd = {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'خانه',
+              item: siteUrl,
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'محصولات',
+              item: `${siteUrl}/products`,
+            },
+            {
+              '@type': 'ListItem',
+              position: 3,
+              name: p.title,
+              item: canonicalUrl.value,
+            },
+          ],
+        }
+
+        return JSON.stringify([jsonLd, breadcrumbLd])
+      }),
+    },
+  ],
+})
 </script>
 
 <template>
@@ -255,7 +418,7 @@ watch(
         </div>
       </section>
       <ProductTabs class="mt-16 lg:mt-24" :specifications="specifications" :description="product.description"
-        :comments="commentsData" :productId="productId" />
+        :comments="commentsData" :productId="product.id" />
       <ProductRelatedProducts class="mt-16 lg:mt-24" />
     </div>
     <div v-else class="text-center py-16">

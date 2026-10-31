@@ -100,12 +100,7 @@
     </div>
 
     <!-- مودال -->
-    <panelEditUserModal
-      :show="showModal"
-      :userData="profileData?.user"
-      @close="showModal = false"
-      @save="handleSave"
-    />
+    <panelEditUserModal :show="showModal" :userData="profileData?.user" @close="showModal = false" @save="handleSave" />
   </div>
 </template>
 
@@ -145,6 +140,19 @@ const showModal = ref(false);
 async function handleSave() {
   await refreshProfile();
 }
+useSeoMeta({
+  title: () => ' پنل کاربری | سیسمونی جاوید',
+  description: '  کاربر در پنل اختصاصی',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/panel' }],
+  // 🔹 جلوگیری از ایندکس شدن با متا تگ اضافی برای اطمینان بیشتر
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet' },
+  ],
+})
 </script>
 
 <style scoped>
@@ -207,8 +215,13 @@ async function handleSave() {
   box-shadow: 0 0 0 3px #fff;
 }
 
-.jb-divider::before { right: -4px; }
-.jb-divider::after  { left: -4px; }
+.jb-divider::before {
+  right: -4px;
+}
+
+.jb-divider::after {
+  left: -4px;
+}
 
 /* ===== حالت لودینگ ===== */
 .jb-state-block {

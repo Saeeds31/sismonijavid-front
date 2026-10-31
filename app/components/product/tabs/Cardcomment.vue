@@ -29,10 +29,14 @@ import { ref, computed } from 'vue'
 import CommentItem from './CommentItem.vue'
 import { useApi } from "@/composables/api/useApi";
 let comments = ref(null);
+const props = defineProps({
+   productId: { type: [String, Number], required: true },
+
+});
 const route = useRoute();
 const { getProductComments } = useApi();
 try {
-   const response = await getProductComments(route.params.id);
+   const response = await getProductComments(props.productId);
    comments.value = response;
 } catch (error) {
    console.error("خطا در دریافت کامنت");

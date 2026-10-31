@@ -866,6 +866,15 @@ async function handlePayment() {
     isProcessing.value = false;
   }
 }
+useSeoMeta({
+  title: 'نحوه پرداخت سفارش | سیسمونی جاوید',
+  description: 'مشاهده و مدیریت نحوه پرداخت سفارش در فروشگاه سیسمونی جاوید.',
+  robots: 'noindex, nofollow', // 🔴 مهم‌ترین خط
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/payment' }],
+})
 </script>
 <style scoped>
 /* =========================================================

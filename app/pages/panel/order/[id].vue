@@ -862,6 +862,19 @@ const formatTimer = (seconds) => {
 onMounted(() => {
   fetchOrder();
 });
+useSeoMeta({
+  title: () => 'جزئیات سفارش پنل کاربری | سیسمونی جاوید',
+  description: ' جزئیات سفارش کاربر در پنل اختصاصی',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/panel/wallet' }],
+  // 🔹 جلوگیری از ایندکس شدن با متا تگ اضافی برای اطمینان بیشتر
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet' },
+  ],
+})
 </script>
 
 <style scoped>

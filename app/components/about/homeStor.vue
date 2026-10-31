@@ -9,11 +9,11 @@
         </div>
 
         <!-- تایتل -->
-        <h2 class="jb-about-title">
+        <h1 class="jb-about-title">
           فروشگاه
           <span class="jb-about-title-strong">سیسمونی جاوید</span>
           ، انتخابی شایسته
-        </h2>
+        </h1>
 
         <!-- خط تزئینی -->
         <div class="jb-about-line"></div>

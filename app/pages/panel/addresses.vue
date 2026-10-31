@@ -208,6 +208,20 @@ function openNewAddressModal() {
   editingAddress.value = null;
   showAddressModal.value = true;
 }
+
+useSeoMeta({
+  title: () => 'آدرس ها پنل کاربری | سیسمونی جاوید',
+  description: 'لیست آدرس ها کاربر در پنل اختصاصی',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/panel/addresses' }],
+  // 🔹 جلوگیری از ایندکس شدن با متا تگ اضافی برای اطمینان بیشتر
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet' },
+  ],
+})
 </script>
 
 <style scoped>

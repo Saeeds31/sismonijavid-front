@@ -70,31 +70,19 @@
                     d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </span>
-              <input
-                id="amount"
-                v-model.number="chargeAmount"
-                type="number"
-                min="10000"
-                step="1000"
-                class="jb-form-input"
-                placeholder="حداقل 10,000 تومان"
-                required
-              />
+              <input id="amount" v-model.number="chargeAmount" type="number" min="10000" step="1000"
+                class="jb-form-input" placeholder="حداقل 10,000 تومان" required />
             </div>
             <p class="jb-form-hint">
               مبلغ را به تومان وارد کنید (حداقل ۱۰,۰۰۰ تومان)
             </p>
           </div>
 
-          <button
-            type="submit"
-            :disabled="isCharging || !chargeAmount || chargeAmount < 10000"
-            class="jb-btn-linear jb-charge-btn"
-          >
+          <button type="submit" :disabled="isCharging || !chargeAmount || chargeAmount < 10000"
+            class="jb-btn-linear jb-charge-btn">
             <span v-if="!isCharging" class="jb-charge-btn-inner">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                  d="M12 4v16m8-8H4" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
               </svg>
               شارژ کیف پول
             </span>
@@ -137,24 +125,15 @@
 
         <!-- لیست تراکنش‌ها -->
         <div v-else class="jb-transactions-list">
-          <div
-            v-for="transaction in transactions"
-            :key="transaction.id"
-            class="jb-transaction-item"
-            :class="
-              transaction.type === 'credit'
-                ? 'is-credit'
-                : transaction.type === 'purchase'
+          <div v-for="transaction in transactions" :key="transaction.id" class="jb-transaction-item" :class="transaction.type === 'credit'
+              ? 'is-credit'
+              : transaction.type === 'purchase'
                 ? 'is-purchase'
                 : 'is-debit'
-            "
-          >
+            ">
             <div class="jb-transaction-inner">
               <div class="jb-transaction-icon-wrap">
-                <component
-                  :is="getTransactionIcon(transaction.type)"
-                  class="w-4 h-4"
-                />
+                <component :is="getTransactionIcon(transaction.type)" class="w-4 h-4" />
               </div>
 
               <div class="jb-transaction-info">
@@ -162,32 +141,22 @@
                   {{ getTransactionTitle(transaction.type) }}
                 </p>
                 <p class="jb-transaction-date">{{ transaction.date }}</p>
-                <p
-                  v-if="transaction.description"
-                  class="jb-transaction-desc"
-                >
+                <p v-if="transaction.description" class="jb-transaction-desc">
                   {{ transaction.description }}
                 </p>
               </div>
             </div>
 
             <div class="jb-transaction-amount-wrap">
-              <p
-                class="jb-transaction-amount"
-                :class="
-                  transaction.type === 'credit'
-                    ? 'is-credit'
-                    : 'is-debit'
-                "
-              >
+              <p class="jb-transaction-amount" :class="transaction.type === 'credit'
+                  ? 'is-credit'
+                  : 'is-debit'
+                ">
                 {{ transaction.type === "credit" ? "+" : "-" }}
                 {{ transaction.amount?.toLocaleString() }}
                 <span class="jb-transaction-unit">تومان</span>
               </p>
-              <span
-                class="jb-transaction-status"
-                :class="`status-${transaction.status}`"
-              >
+              <span class="jb-transaction-status" :class="`status-${transaction.status}`">
                 {{ getStatusText(transaction.status) }}
               </span>
             </div>
@@ -321,6 +290,20 @@ function getStatusText(status) {
       return status;
   }
 }
+
+useSeoMeta({
+  title: () => 'کیف پول پنل کاربری | سیسمونی جاوید',
+  description: ' کیف پول کاربر در پنل اختصاصی',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/panel/wallet' }],
+  // 🔹 جلوگیری از ایندکس شدن با متا تگ اضافی برای اطمینان بیشتر
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet' },
+  ],
+})
 </script>
 
 <style scoped>
@@ -383,8 +366,13 @@ function getStatusText(status) {
   box-shadow: 0 0 0 3px #fff;
 }
 
-.jb-divider::before { right: -4px; }
-.jb-divider::after  { left: -4px; }
+.jb-divider::before {
+  right: -4px;
+}
+
+.jb-divider::after {
+  left: -4px;
+}
 
 /* ===== بدنه ===== */
 .jb-wallet-body {
@@ -464,8 +452,15 @@ function getStatusText(status) {
 }
 
 @keyframes jbWalletFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 /* حباب‌های تزئینی */
@@ -651,7 +646,9 @@ function getStatusText(status) {
 }
 
 @keyframes jbSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* =========================================================

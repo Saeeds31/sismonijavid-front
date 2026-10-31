@@ -40,11 +40,12 @@ const mappedCategories = computed(() => {
 const mapCategory = (item, index) => {
   return {
     id: item.id,
+    slug: item.slug,
     title: item.title ?? "دسته‌بندی",
     description:
       item.meta_description || item.description || "محصولات این دسته را ببینید",
     image: item.main_image || item.icon || "",
-    link: item.slug ? `/category/${item.slug}` : `/category/${item.id}`,
+    link: item.slug ? `/category/${item.slug}` : `/category/${item.slug}`,
     buttonText: "مشاهده محصولات",
     big: index === 0,
     gradient: gradientByIndex(index),

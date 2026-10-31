@@ -214,6 +214,67 @@ onMounted(() => {
     }
   }, 500)
 })
+useSeoMeta({
+  title: 'سیسمونی جاوید | فروشگاه اینترنتی لوازم سیسمونی و نوزاد در گرگان',
+  description: 'خرید آنلاین سیسمونی، لباس نوزاد، لوازم ایمنی و اسباب‌بازی از فروشگاه سیسمونی جاوید. ارسال به سراسر کشور. مراجعه حضوری: گرگان، خیابان سرخواجه، مجتمع آفتاب.',
+  ogTitle: 'سیسمونی جاوید | فروشگاه تخصصی لوازم نوزاد',
+  ogDescription: 'مجموعه‌ای کامل از بهترین برندهای سیسمونی و لوازم نوزاد با ضمانت اصالت کالا.',
+  ogImage: 'https://sismonijavid.ir/_nuxt/logo.BGpC-RES.png', // آدرس یک تصویر شاخص از لوگو یا فروشگاه
+  ogUrl: 'https://sismonijavid.ir',
+  ogType: 'website',
+  ogLocale: 'fa_IR',
+  twitterCard: 'summary_large_image',
+  robots: 'index, follow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir' }],
+  script: [
+    {
+      type: 'application/ld+json',
+      key: 'home-jsonld',
+      innerHTML: JSON.stringify([
+        {
+          '@context': 'https://schema.org',
+          '@type': 'OnlineStore',
+          name: 'سیسمونی جاوید',
+          url: 'https://sismonijavid.ir',
+          logo: 'https://sismonijavid.ir/logo.png', // مسیر لوگوی سایت
+          description: 'فروشگاه اینترنتی سیسمونی جاوید، عرضه‌کننده لوازم نوزاد، سیسمونی و اسباب‌بازی در گرگان و سراسر ایران.',
+          telephone: '+989375015769', // فرمت بین‌المللی شماره تماس
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'خیابان سرخواجه، مجتمع آفتاب، طبقه همکف',
+            addressLocality: 'گرگان',
+            addressRegion: 'گلستان',
+            addressCountry: 'IR',
+          },
+          contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+989375015769',
+            contactType: 'customer service',
+            areaServed: 'IR',
+            availableLanguage: 'Persian',
+          },
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'سیسمونی جاوید',
+          url: 'https://sismonijavid.ir',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: 'https://sismonijavid.ir/search?q={search_term_string}',
+            },
+            'query-input': 'required name=search_term_string',
+          },
+        },
+      ]),
+    },
+  ],
+})
 </script>
 
 <style scoped>

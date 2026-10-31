@@ -214,17 +214,24 @@ async function handleNextStep() {
     toast.error(err.response?.data?.message || 'خطا در ثبت اطلاعات ارسال')
   }
 }
+useSeoMeta({
+  title: 'روش ارسال | سیسمونی جاوید',
+  description: 'مشاهده و مدیریت آدرس و روش ارسال در فروشگاه سیسمونی جاوید.',
+  robots: 'noindex, nofollow', // 🔴 مهم‌ترین خط
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/shipping' }],
+})
 </script>
 
 
 <template>
   <div class="container jb-shipping-page">
-    <SharedBreadCrumb
-      :items="[
-        { label: 'سبد خرید', href: '/cart' },
-        { label: 'انتخاب آدرس و روش ارسال', href: '/shipping' },
-      ]"
-    />
+    <SharedBreadCrumb :items="[
+      { label: 'سبد خرید', href: '/cart' },
+      { label: 'انتخاب آدرس و روش ارسال', href: '/shipping' },
+    ]" />
     <CartProgressSteps :current-step="2" />
 
     <div class="jb-shipping-card">
@@ -247,14 +254,9 @@ async function handleNextStep() {
           </p>
         </div>
 
-        <button
-          v-if="!reservationMode"
-          @click="openNewAddressModal"
-          class="jb-btn-add-address"
-        >
+        <button v-if="!reservationMode" @click="openNewAddressModal" class="jb-btn-add-address">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-              d="M12 4v16m8-8H4" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
           </svg>
           <span>افزودن آدرس جدید</span>
         </button>
@@ -294,11 +296,8 @@ async function handleNextStep() {
            رزرو مود
       ============================================================ -->
       <div v-else-if="reservationMode" class="jb-reservation-address">
-        <div
-          v-for="address in addresses.filter((a) => a.id === selectedAddress)"
-          :key="address.id"
-          class="jb-address-card jb-address-reserved"
-        >
+        <div v-for="address in addresses.filter((a) => a.id === selectedAddress)" :key="address.id"
+          class="jb-address-card jb-address-reserved">
           <div class="jb-address-card-inner">
             <div class="jb-address-radio-wrap">
               <div class="jb-address-radio is-checked">
@@ -344,8 +343,7 @@ async function handleNextStep() {
 
             <div class="jb-badge-reserved">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                  d="M5 13l4 4L19 7" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
               </svg>
               آدرس رزرو
             </div>
@@ -357,30 +355,15 @@ async function handleNextStep() {
            حالت عادی: انتخاب آدرس
       ============================================================ -->
       <div v-else class="jb-address-grid">
-        <label
-          v-for="address in addresses"
-          :key="address.id"
-          class="jb-address-card"
-          :class="{ 'is-selected': selectedAddress === address.id }"
-        >
-          <input
-            type="radio"
-            name="address"
-            :value="address.id"
-            v-model="selectedAddress"
-            class="jb-address-radio-input"
-          />
+        <label v-for="address in addresses" :key="address.id" class="jb-address-card"
+          :class="{ 'is-selected': selectedAddress === address.id }">
+          <input type="radio" name="address" :value="address.id" v-model="selectedAddress"
+            class="jb-address-radio-input" />
 
           <div class="jb-address-card-inner">
             <div class="jb-address-radio-wrap">
-              <div
-                class="jb-address-radio"
-                :class="{ 'is-checked': selectedAddress === address.id }"
-              >
-                <div
-                  v-if="selectedAddress === address.id"
-                  class="jb-address-radio-dot"
-                ></div>
+              <div class="jb-address-radio" :class="{ 'is-checked': selectedAddress === address.id }">
+                <div v-if="selectedAddress === address.id" class="jb-address-radio-dot"></div>
               </div>
             </div>
 
@@ -421,24 +404,16 @@ async function handleNextStep() {
             </div>
 
             <div class="jb-address-actions">
-              <button
-                @click.prevent="handleDeleteAddress(address.id)"
-                type="button"
-                class="jb-address-action-btn jb-delete-btn"
-                aria-label="حذف"
-              >
+              <button @click.prevent="handleDeleteAddress(address.id)" type="button"
+                class="jb-address-action-btn jb-delete-btn" aria-label="حذف">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
                 </svg>
               </button>
 
-              <button
-                @click.prevent="openEditModal(address)"
-                type="button"
-                class="jb-address-action-btn jb-edit-btn"
-                aria-label="ویرایش"
-              >
+              <button @click.prevent="openEditModal(address)" type="button" class="jb-address-action-btn jb-edit-btn"
+                aria-label="ویرایش">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -465,38 +440,20 @@ async function handleNextStep() {
           <SharedLoadingSpinner size="sm" />
         </div>
 
-        <div
-          v-else-if="shippingMethods.length === 0"
-          class="jb-state-block jb-state-empty"
-        >
+        <div v-else-if="shippingMethods.length === 0" class="jb-state-block jb-state-empty">
           <span>روش ارسالی موجود نیست</span>
         </div>
 
         <div v-else class="jb-shipping-grid">
-          <label
-            v-for="method in shippingMethods"
-            :key="method.id"
-            class="jb-shipping-card"
-            :class="{ 'is-selected': selectedShipping === method.id }"
-          >
-            <input
-              type="radio"
-              name="shipping"
-              :value="method.id"
-              v-model="selectedShipping"
-              class="jb-shipping-radio-input"
-            />
+          <label v-for="method in shippingMethods" :key="method.id" class="jb-shipping-card"
+            :class="{ 'is-selected': selectedShipping === method.id }">
+            <input type="radio" name="shipping" :value="method.id" v-model="selectedShipping"
+              class="jb-shipping-radio-input" />
 
             <div class="jb-shipping-card-inner">
               <div class="jb-shipping-card-header">
-                <div
-                  class="jb-address-radio"
-                  :class="{ 'is-checked': selectedShipping === method.id }"
-                >
-                  <div
-                    v-if="selectedShipping === method.id"
-                    class="jb-address-radio-dot"
-                  ></div>
+                <div class="jb-address-radio" :class="{ 'is-checked': selectedShipping === method.id }">
+                  <div v-if="selectedShipping === method.id" class="jb-address-radio-dot"></div>
                 </div>
                 <span class="jb-shipping-card-name">{{ method.name }}</span>
               </div>
@@ -523,31 +480,22 @@ async function handleNextStep() {
       <div class="jb-shipping-actions">
         <NuxtLink to="/cart" class="jb-shipping-btn-secondary">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-              d="M9 5l7 7-7 7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
           </svg>
           مرحله قبل
         </NuxtLink>
 
-        <button
-          @click="handleNextStep"
-          class="jb-btn-linear jb-shipping-btn-primary"
-        >
+        <button @click="handleNextStep" class="jb-btn-linear jb-shipping-btn-primary">
           <span>مرحله بعد</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-              d="M15 19l-7-7 7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
       </div>
     </div>
 
-    <CartModalAdderss
-      :show="showAddressModal"
-      :edit-address="editingAddress"
-      @close="showAddressModal = false"
-      @save="addNewAddress"
-    />
+    <CartModalAdderss :show="showAddressModal" :edit-address="editingAddress" @close="showAddressModal = false"
+      @save="addNewAddress" />
   </div>
 </template>
 <style scoped>
@@ -653,8 +601,13 @@ async function handleNextStep() {
   box-shadow: 0 0 0 3px #fff;
 }
 
-.jb-divider::before { right: -4px; }
-.jb-divider::after  { left: -4px; }
+.jb-divider::before {
+  right: -4px;
+}
+
+.jb-divider::after {
+  left: -4px;
+}
 
 .jb-divider-lg {
   margin: 32px 0;

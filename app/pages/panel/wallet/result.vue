@@ -46,6 +46,19 @@ const primaryAction = computed(() => {
     to: "/panel/wallet",
   };
 });
+useSeoMeta({
+  title: () => 'کیف پول پنل کاربری | سیسمونی جاوید',
+  description: ' کیف پول کاربر در پنل اختصاصی',
+  robots: 'noindex, nofollow',
+})
+
+useHead({
+  link: [{ rel: 'canonical', href: 'https://sismonijavid.ir/panel/result' }],
+  // 🔹 جلوگیری از ایندکس شدن با متا تگ اضافی برای اطمینان بیشتر
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet' },
+  ],
+})
 </script>
 
 <template>
@@ -54,43 +67,15 @@ const primaryAction = computed(() => {
     <div class="jb-result-bubble jb-result-bubble-1"></div>
     <div class="jb-result-bubble jb-result-bubble-2"></div>
 
-    <div
-      class="jb-result-card"
-      :class="isSuccess ? 'is-success' : 'is-failed'"
-    >
+    <div class="jb-result-card" :class="isSuccess ? 'is-success' : 'is-failed'">
       <!-- ===== آیکون نتیجه ===== -->
       <div class="jb-result-icon-wrap">
-        <div
-          class="jb-result-icon"
-          :class="isSuccess ? 'jb-icon-success' : 'jb-icon-failed'"
-        >
-          <svg
-            v-if="isSuccess"
-            class="w-10 h-10"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="3"
-              d="M5 13l4 4L19 7"
-            />
+        <div class="jb-result-icon" :class="isSuccess ? 'jb-icon-success' : 'jb-icon-failed'">
+          <svg v-if="isSuccess" class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
           </svg>
-          <svg
-            v-else
-            class="w-10 h-10"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="3"
-              d="M6 18L18 6M6 6l12 12"
-            />
+          <svg v-else class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </div>
 
@@ -99,27 +84,18 @@ const primaryAction = computed(() => {
       </div>
 
       <!-- ===== تیتر ===== -->
-      <h1
-        class="jb-result-title"
-        :class="isSuccess ? 'jb-title-success' : 'jb-title-failed'"
-      >
+      <h1 class="jb-result-title" :class="isSuccess ? 'jb-title-success' : 'jb-title-failed'">
         {{ title }}
       </h1>
 
       <!-- خط تزئینی -->
-      <div
-        class="jb-result-divider"
-        :class="isSuccess ? 'jb-divider-success' : 'jb-divider-failed'"
-      ></div>
+      <div class="jb-result-divider" :class="isSuccess ? 'jb-divider-success' : 'jb-divider-failed'"></div>
 
       <!-- توضیحات -->
       <p class="jb-result-desc">{{ description }}</p>
 
       <!-- اطلاعات تراکنش (در صورت موفقیت) -->
-      <div
-        v-if="isSuccess && walletTransactionId"
-        class="jb-result-info"
-      >
+      <div v-if="isSuccess && walletTransactionId" class="jb-result-info">
         <div class="jb-result-info-row">
           <span class="jb-result-info-label">شماره تراکنش</span>
           <span class="jb-result-info-value" dir="ltr">
@@ -130,43 +106,17 @@ const primaryAction = computed(() => {
 
       <!-- دکمه‌ها -->
       <div class="jb-result-actions">
-        <NuxtLink
-          :to="primaryAction.to"
-          class="jb-btn-linear jb-result-btn-primary"
-        >
+        <NuxtLink :to="primaryAction.to" class="jb-btn-linear jb-result-btn-primary">
           <span>{{ primaryAction.label }}</span>
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2.5"
-              d="M15 19l-7-7 7-7"
-            />
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
           </svg>
         </NuxtLink>
 
-        <NuxtLink
-          v-if="!isSuccess"
-          to="/"
-          class="jb-result-btn-secondary"
-        >
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2.2"
-              d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"
-            />
+        <NuxtLink v-if="!isSuccess" to="/" class="jb-result-btn-secondary">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
+              d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10" />
           </svg>
           بازگشت به صفحه اصلی
         </NuxtLink>
@@ -218,8 +168,15 @@ const primaryAction = computed(() => {
 }
 
 @keyframes jbFloatBubble {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50%      { transform: translateY(-24px) scale(1.05); }
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-24px) scale(1.05);
+  }
 }
 
 /* کارت */
@@ -246,6 +203,7 @@ const primaryAction = computed(() => {
     opacity: 0;
     transform: translateY(40px) scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -286,9 +244,17 @@ const primaryAction = computed(() => {
 }
 
 @keyframes jbIconPop {
-  0%   { transform: scale(0); }
-  60%  { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0);
+  }
+
+  60% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .jb-icon-success {
@@ -342,10 +308,13 @@ const primaryAction = computed(() => {
 }
 
 @keyframes jbRingPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.7;
   }
+
   50% {
     transform: translate(-50%, -50%) scale(1.08);
     opacity: 1;
@@ -361,8 +330,13 @@ const primaryAction = computed(() => {
   margin-bottom: 14px;
 }
 
-.jb-title-success { color: #16a34a; }
-.jb-title-failed  { color: #c9184a; }
+.jb-title-success {
+  color: #16a34a;
+}
+
+.jb-title-failed {
+  color: #c9184a;
+}
 
 /* خط تزئینی */
 .jb-result-divider {
@@ -482,8 +456,15 @@ const primaryAction = computed(() => {
     height: 76px;
   }
 
-  .jb-ring-1 { width: 88px;  height: 88px;  }
-  .jb-ring-2 { width: 106px; height: 106px; }
+  .jb-ring-1 {
+    width: 88px;
+    height: 88px;
+  }
+
+  .jb-ring-2 {
+    width: 106px;
+    height: 106px;
+  }
 
   .jb-result-title {
     font-size: 1.15rem;
