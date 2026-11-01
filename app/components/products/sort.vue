@@ -1,5 +1,5 @@
 <template>
-  <div class="jb-sort-bar">
+  <div class="jb-sort-bar mb-2">
     <div class="jb-sort-label">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -9,13 +9,8 @@
     </div>
 
     <ul class="jb-sort-list">
-      <li
-        v-for="option in sortOptions"
-        :key="option.label"
-        :class="{ active: selectedLabel === option.label }"
-        @click="selectSort(option)"
-        class="jb-sort-item"
-      >
+      <li v-for="option in sortOptions" :key="option.label" :class="{ active: selectedLabel === option.label }"
+        @click="selectSort(option)" class="jb-sort-item">
         {{ option.label }}
       </li>
     </ul>
@@ -82,11 +77,13 @@ const selectSort = (option) => {
 
 .jb-sort-list {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
   list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
 .jb-sort-item {
@@ -122,6 +119,7 @@ const selectSort = (option) => {
     padding: 12px;
     gap: 10px;
   }
+
   .jb-sort-item {
     padding: 6px 12px;
     font-size: 0.75rem;

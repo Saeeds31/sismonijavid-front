@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit" class="jb-search-box">
+  <form @submit.prevent="onSubmit" class="jb-search-box  mb-3 mt-3">
     <div class="jb-search-header">
       <span class="jb-filter-box-dot"></span>
       <h3 class="jb-search-title">جستجو کنید</h3>

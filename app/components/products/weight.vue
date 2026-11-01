@@ -1,5 +1,5 @@
 <template>
-  <div class="jb-filter-box">
+  <div class="jb-filter-box  mb-3 mt-3">
     <div class="jb-filter-box-header" @click="collapsed = !collapsed">
       <h3 class="jb-filter-box-title">
         <span class="jb-filter-box-dot"></span>

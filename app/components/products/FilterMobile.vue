@@ -47,7 +47,7 @@
         <!-- محتوا -->
         <div class="jb-mf-drawer-body">
           <!-- دسته بندی -->
-          <div v-if="currentTab === 'categories'">
+          <div v-if="currentTab === 'categories'" class="mb-2">
             <ProductsFilters
               v-model:selectedCategories="localSelectedCategories"
               :categories="categories"
@@ -64,7 +64,7 @@
 
           <!-- فیلتر -->
           <div v-else-if="currentTab === 'filter'" class="flex flex-col gap-5">
-            <ProductsWeight v-model:selectedWeight="localSelectedWeight" />
+            <!-- <ProductsWeight v-model:selectedWeight="localSelectedWeight" /> -->
             <ProductsAvailable v-model:onlyAvailable="localOnlyAvailable" />
             <ProductsSearch v-model="localQuery" @search="onSearch" />
           </div>

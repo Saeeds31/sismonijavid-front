@@ -1,5 +1,5 @@
 <template>
-  <div class="jb-filter-box">
+  <div class="jb-filter-box  mb-3 mt-3">
     <div class="jb-price-header">
       <span class="jb-filter-box-dot"></span>
       <h3 class="jb-price-title">محدوده قیمت</h3>

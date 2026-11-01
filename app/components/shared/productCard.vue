@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link @click="saveLocation()" :to="`/product/${product.slug??product.id}`" class="jb-product-card group"
+  <nuxt-link @click="saveLocation()" :to="`/product/${product.slug ?? product.id}`" class="jb-product-card group"
     :class="{ 'is-unavailable': product.status === 'unpublished' }">
     <!-- ===== تصویر با پدینگ داخل کارت ===== -->
     <div class="jb-product-image-wrap">
@@ -69,7 +69,7 @@
         </div>
 
         <!-- دکمه مستطیلی -->
-        <button  class="jb-product-btn" :disabled="product.status === 'unpublished'">
+        <button class="jb-product-btn" :disabled="product.status === 'unpublished'">
           {{ product.status === 'unpublished' ? 'اطلاع' : 'مشاهده محصول' }}
         </button>
       </div>
@@ -335,8 +335,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-    background: rgb(255 255 255 / 55%);
-    backdrop-filter: blur(0.3px);
+  background: rgb(255 255 255 / 55%);
+  backdrop-filter: blur(0.3px);
   -webkit-backdrop-filter: blur(3px);
   z-index: 4;
   border-radius: 12px;
@@ -400,6 +400,12 @@ onMounted(() => {
   gap: 10px;
   margin-top: auto;
   padding-top: 2px;
+}
+
+@media (max-width:540px) {
+  .jb-product-footer {
+    flex-direction: column;
+  }
 }
 
 /* ----- بخش قیمت ----- */
@@ -574,7 +580,7 @@ onMounted(() => {
     min-height: 320px;
   }
 
- 
+
 
   .jb-price-amount {
     font-size: 0.85rem;

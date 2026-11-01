@@ -15,7 +15,7 @@
 
     <ProductsFilters v-model:selectedCategories="localSelectedCategories" :categories="categories" />
     <ProductsSearch v-model="localQuery" @search="onSearch" />
-    <ProductsWeight v-model:selectedWeight="localSelectedWeight" />
+    <!-- <ProductsWeight v-model:selectedWeight="localSelectedWeight" /> -->
     <ProductsAvailable v-model:onlyAvailable="localOnlyAvailable" />
     <ProductsRangprice :mainPriceRange="mainPriceRange" v-model:priceRange="localPriceRange" />
 

@@ -3,7 +3,7 @@
   <main class="container mx-auto md:p-6" dir="rtl">
     <sharedBreadCrumb :items="[{ label: 'محصولات', href: '/products' }]" />
 
-    <section class="flex flex-col lg:flex-row gap-6 mt-10">
+    <section class="flex flex-col lg:flex-row gap-6 mt-0 md:mt-10">
       <!-- سایدبار فیلتر -->
       <ProductsAside class="hidden lg:block" v-model:selectedCategories="filters.categories"
         v-model:selectedWeight="filters.weights" v-model:onlyAvailable="filters.inStock"
