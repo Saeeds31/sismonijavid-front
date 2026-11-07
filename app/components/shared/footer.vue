@@ -84,6 +84,11 @@
               <img :src="item.icon" :alt="item.label" />
               <span>{{ item.label }}</span>
             </a>
+            <a referrerpolicy='origin' target='_blank'
+              href='https://trustseal.enamad.ir/?id=702342&Code=u8S0xaRkdoZnDjpDmRlQLwXDczeitXnV'><img
+                referrerpolicy='origin' class="jb-social-card"
+                src='https://trustseal.enamad.ir/logo.aspx?id=702342&Code=u8S0xaRkdoZnDjpDmRlQLwXDczeitXnV' alt=''
+                style='cursor:pointer' code='u8S0xaRkdoZnDjpDmRlQLwXDczeitXnV'></a>
           </div>
         </div>
 
