@@ -232,7 +232,7 @@ const socialLinks = computed(() => {
    اطلاعات تماس
 ============================================================ */
 const fallbackContacts = [
-  { label: "۰۹۳۷ - ۵۰۱ - ۵۷۶۹", href: "tel:09375015769", icon: "/icons/phone.svg", dir: "ltr" },
+  { label: "09210133186-09022072235", href: "tel:09375015769", icon: "/icons/phone.svg", dir: "ltr" },
   { label: "گرگان، خیابان سرخواجه، مجتمع آفتاب، طبقه همکف", icon: "/icons/location.svg" },
 ];
 

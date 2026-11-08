@@ -154,7 +154,7 @@
 
             <div class="jb-gateway-grid">
               <!-- پارسیان -->
-              <button
+              <!-- <button
                 type="button"
                 aria-label="انتخاب درگاه پارسیان"
                 class="jb-gateway-card"
@@ -173,7 +173,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                   </svg>
                 </span>
-              </button>
+              </button> -->
 
               <!-- زرین‌پال -->
               <button
@@ -189,7 +189,7 @@
                       d="M12 2l9 5v10l-9 5-9-5V7l9-5z" />
                   </svg>
                 </span>
-                <span class="jb-gateway-name">درگاه زرین‌پال</span>
+                <span class="jb-gateway-name">درگاه زیبال</span>
                 <span v-if="selected === 2" class="jb-gateway-check">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
@@ -312,7 +312,7 @@
         ============================================================ -->
         <div class="jb-payment-col">
           <!-- نوع سفارش (رزرو) -->
-          <div
+          <!-- <div
             class="jb-reservation-grid"
             :class="[
               selectedReservation && selectedReservation.order_id
@@ -320,7 +320,6 @@
                 : 'is-three',
             ]"
           >
-            <!-- سفارش عادی -->
             <label
               class="jb-res-card"
               :class="{ 'is-selected': reservationType === 'none' }"
@@ -350,7 +349,6 @@
               </div>
             </label>
 
-            <!-- رزرو ۳ روزه -->
             <label
               v-if="!selectedReservation || !selectedReservation.order_id"
               class="jb-res-card"
@@ -374,7 +372,6 @@
               </div>
             </label>
 
-            <!-- رزرو ۷ روزه -->
             <label
               v-if="!selectedReservation || !selectedReservation.order_id"
               class="jb-res-card"
@@ -397,7 +394,7 @@
                 </div>
               </div>
             </label>
-          </div>
+          </div> -->
 
           <!-- اطلاعات آدرس -->
           <div v-if="isFetchingSummary" class="jb-summary-box jb-summary-loading">
@@ -557,7 +554,7 @@ const { getCheckoutSummary } = useApi();
 const { $api } = useNuxtApp();
 
 const paymentMethod = ref("online"); // 'online' یا 'wallet'
-const selected = ref(1); // برای انتخاب درگاه پرداخت
+const selected = ref(2); // برای انتخاب درگاه پرداخت
 const cartData = ref(null);
 const couponCode = ref(""); // کد تخفیف
 const isProcessing = ref(false); // برای جلوگیری از کلیک مکرر
@@ -568,10 +565,10 @@ const reservationStorageKey = "selected-reservation";
 const selectedReservation = ref(null);
 let user_note = ref('');
 
-const bankCardNumber = ref("5894-6311-7108-1854");
+const bankCardNumber = ref("6104-3310-4719-3157");
 const bankAccountNumber = ref("4006051640119");
-const bankShebaNumber = ref("IR780130100000000333237675");
-const bankAccountOwner = ref("مهدیه خراسانی - بانک رفاه");
+const bankShebaNumber = ref("IR190120010000002917515931");
+const bankAccountOwner = ref("جاوید رحیمی نژاد - بانک ملت");
 const copyText = (text) => {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text)
