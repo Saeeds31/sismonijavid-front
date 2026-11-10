@@ -1,12 +1,10 @@
 <template>
   <div class="container jb-payment-page">
-    <SharedBreadCrumb
-      :items="[
-        { label: 'سبد خرید', href: '/cart' },
-        { label: 'انتخاب آدرس و روش ارسال', href: '/shipping' },
-        { label: 'پرداخت', href: '/payment' },
-      ]"
-    />
+    <SharedBreadCrumb :items="[
+      { label: 'سبد خرید', href: '/cart' },
+      { label: 'انتخاب آدرس و روش ارسال', href: '/shipping' },
+      { label: 'پرداخت', href: '/payment' },
+    ]" />
     <CartProgressSteps :current-step="3" />
 
     <div class="jb-payment-card">
@@ -39,17 +37,9 @@
 
             <div class="jb-payment-methods">
               <!-- پرداخت اینترنتی -->
-              <label
-                class="jb-pay-method"
-                :class="{ 'is-selected': paymentMethod === 'online' }"
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="online"
-                  v-model="paymentMethod"
-                  class="jb-pay-radio-input"
-                />
+              <label class="jb-pay-method" :class="{ 'is-selected': paymentMethod === 'online' }">
+                <input type="radio" name="paymentMethod" value="online" v-model="paymentMethod"
+                  class="jb-pay-radio-input" />
                 <div class="jb-pay-method-inner">
                   <div class="jb-pay-radio" :class="{ 'is-checked': paymentMethod === 'online' }">
                     <div v-if="paymentMethod === 'online'" class="jb-pay-radio-dot"></div>
@@ -72,18 +62,10 @@
               </label>
 
               <!-- کیف پول -->
-              <label
-                v-if="wallet && wallet.balance"
-                class="jb-pay-method"
-                :class="{ 'is-selected': paymentMethod === 'wallet' }"
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="wallet"
-                  v-model="paymentMethod"
-                  class="jb-pay-radio-input"
-                />
+              <label v-if="wallet && wallet.balance" class="jb-pay-method"
+                :class="{ 'is-selected': paymentMethod === 'wallet' }">
+                <input type="radio" name="paymentMethod" value="wallet" v-model="paymentMethod"
+                  class="jb-pay-radio-input" />
                 <div class="jb-pay-method-inner">
                   <div class="jb-pay-radio" :class="{ 'is-checked': paymentMethod === 'wallet' }">
                     <div v-if="paymentMethod === 'wallet'" class="jb-pay-radio-dot"></div>
@@ -109,17 +91,9 @@
               </label>
 
               <!-- کارت به کارت -->
-              <label
-                class="jb-pay-method"
-                :class="{ 'is-selected': paymentMethod === 'card_transfer' }"
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="card_transfer"
-                  v-model="paymentMethod"
-                  class="jb-pay-radio-input"
-                />
+              <label class="jb-pay-method" :class="{ 'is-selected': paymentMethod === 'card_transfer' }">
+                <input type="radio" name="paymentMethod" value="card_transfer" v-model="paymentMethod"
+                  class="jb-pay-radio-input" />
                 <div class="jb-pay-method-inner">
                   <div class="jb-pay-radio" :class="{ 'is-checked': paymentMethod === 'card_transfer' }">
                     <div v-if="paymentMethod === 'card_transfer'" class="jb-pay-radio-dot"></div>
@@ -153,36 +127,8 @@
             </h3>
 
             <div class="jb-gateway-grid">
-              <!-- پارسیان -->
-              <!-- <button
-                type="button"
-                aria-label="انتخاب درگاه پارسیان"
-                class="jb-gateway-card"
-                :class="{ 'is-selected': selected === 1 }"
-                @click="selected = 1"
-              >
-                <span class="jb-gateway-logo">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 2l9 5v10l-9 5-9-5V7l9-5z" />
-                  </svg>
-                </span>
-                <span class="jb-gateway-name">درگاه پارسیان</span>
-                <span v-if="selected === 1" class="jb-gateway-check">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                  </svg>
-                </span>
-              </button> -->
-
-              <!-- زرین‌پال -->
-              <button
-                type="button"
-                aria-label="انتخاب درگاه زرین‌پال"
-                class="jb-gateway-card"
-                :class="{ 'is-selected': selected === 2 }"
-                @click="selected = 2"
-              >
+              <button type="button" aria-label="انتخاب درگاه زرین‌پال" class="jb-gateway-card"
+                :class="{ 'is-selected': selected === 2 }" @click="selected = 2">
                 <span class="jb-gateway-logo">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -190,7 +136,21 @@
                   </svg>
                 </span>
                 <span class="jb-gateway-name">درگاه زیبال</span>
+                <span class="jb-gateway-sub-name">پرداخت نقدی</span>
                 <span v-if="selected === 2" class="jb-gateway-check">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+              </button>
+              <button type="button" aria-label="انتخاب درگاه ترب پی" class="jb-gateway-card"
+                :class="{ 'is-selected': selected === 3 }" @click="selected = 3">
+                <span class="jb-gateway-logo">
+                  <img width="48" height="48" class="rounded-full" src="/images/torobpaylogo.webp" alt="پرداخت چهار قسطه با ترب پی سیسمونی جاوید" />
+                </span>
+                <span class="jb-gateway-name">ترب پی</span>
+                <span class="jb-gateway-sub-name">پرداخت 4 قسطه </span>
+                <span v-if="selected === 3" class="jb-gateway-check">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                   </svg>
@@ -207,7 +167,8 @@
                 </svg>
               </span>
               <span>
-                بسته به حجم سفارشات شما عزیزان متعاقبا بسته‌های ارسالی‌تان بین ۲۴ تا ۴۸ ساعت زمان برای بسته‌بندی و ارسال نیاز دارد.
+                بسته به حجم سفارشات شما عزیزان متعاقبا بسته‌های ارسالی‌تان بین ۲۴ تا ۴۸ ساعت زمان برای بسته‌بندی و ارسال
+                نیاز دارد.
               </span>
             </div>
 
@@ -217,12 +178,8 @@
                 <span class="jb-form-label-dot"></span>
                 توضیحات سفارش
               </label>
-              <textarea
-                v-model="user_note"
-                class="jb-form-textarea"
-                placeholder="توضیحات خود را در خصوص سفارش وارد کنید..."
-                rows="3"
-              ></textarea>
+              <textarea v-model="user_note" class="jb-form-textarea"
+                placeholder="توضیحات خود را در خصوص سفارش وارد کنید..." rows="3"></textarea>
             </div>
           </div>
 
@@ -292,7 +249,8 @@
                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 <span>
-                  توجه: پس از واریز، رسید را در صفحه سفارش آپلود کنید. برای ثبت رسید تا ۱۵ دقیقه بعد از سفارش زمان دارید!
+                  توجه: پس از واریز، رسید را در صفحه سفارش آپلود کنید. برای ثبت رسید تا ۱۵ دقیقه بعد از سفارش زمان
+                  دارید!
                 </span>
               </li>
             </ul>
@@ -444,10 +402,7 @@
               </span>
             </div>
 
-            <div
-              class="jb-summary-line"
-              :class="discount > 0 ? 'jb-line-discount' : ''"
-            >
+            <div class="jb-summary-line" :class="discount > 0 ? 'jb-line-discount' : ''">
               <span class="jb-summary-label">تخفیف محصولات:</span>
               <span class="jb-summary-value">
                 {{ discount > 0 ? "-" : "" }}
@@ -469,10 +424,7 @@
 
             <div class="jb-summary-line">
               <span class="jb-summary-label">هزینه ارسال:</span>
-              <span
-                class="jb-summary-value"
-                :class="shippingCost === 0 ? 'jb-line-free' : ''"
-              >
+              <span class="jb-summary-value" :class="shippingCost === 0 ? 'jb-line-free' : ''">
                 {{
                   shippingCost === 0
                     ? "رایگان"
@@ -493,12 +445,8 @@
           </div>
 
           <!-- دکمه پرداخت -->
-          <button
-            v-if="paymentMethod !== 'card_transfer'"
-            @click="handlePayment"
-            :disabled="isProcessing"
-            class="jb-btn-linear jb-payment-btn"
-          >
+          <button v-if="paymentMethod !== 'card_transfer'" @click="handlePayment" :disabled="isProcessing"
+            class="jb-btn-linear jb-payment-btn">
             <span v-if="isProcessing" class="jb-payment-btn-inner">
               <svg class="jb-spinner" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" />
@@ -515,12 +463,8 @@
             </span>
           </button>
 
-          <button
-            v-else
-            @click="handleCardTransferOrder"
-            :disabled="isProcessing"
-            class="jb-btn-linear jb-payment-btn jb-payment-btn-yellow"
-          >
+          <button v-else @click="handleCardTransferOrder" :disabled="isProcessing"
+            class="jb-btn-linear jb-payment-btn jb-payment-btn-yellow">
             <span v-if="isProcessing" class="jb-payment-btn-inner">
               <svg class="jb-spinner" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" />
@@ -803,8 +747,8 @@ const wallet = computed(() => {
 const getSelectedGateway = () => {
   const gatewayMap = {
     1: 'parsian',
-    2: 'zarinpal',
-    3: 'zibal'
+    2: 'zibal',
+    3: 'torobpay',
   };
   return gatewayMap[selected.value] || 'parsian';
 };
@@ -936,8 +880,13 @@ useHead({
   box-shadow: 0 0 0 3px #fff;
 }
 
-.jb-divider::before { right: -4px; }
-.jb-divider::after  { left: -4px; }
+.jb-divider::before {
+  right: -4px;
+}
+
+.jb-divider::after {
+  left: -4px;
+}
 
 /* ===== گرید اصلی ===== */
 .jb-payment-grid {
@@ -1152,13 +1101,19 @@ useHead({
 }
 
 .jb-gateway-name {
+  font-size: 1rem;
+  font-weight: bolder;
+  text-align: center;
+  color: var(--jb-text);
+}
+.jb-gateway-sub-name {
   font-size: 0.78rem;
   font-weight: 800;
   text-align: center;
   color: var(--jb-text);
 }
-
-.jb-gateway-card.is-selected .jb-gateway-name {
+.jb-gateway-card.is-selected .jb-gateway-name ,
+.jb-gateway-card.is-selected .jb-gateway-sub-name {
   color: #fff;
 }
 
@@ -1179,9 +1134,17 @@ useHead({
 }
 
 @keyframes jbCheckIn {
-  0% { transform: scale(0); }
-  70% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0);
+  }
+
+  70% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* =========================================================
@@ -1657,7 +1620,9 @@ useHead({
 }
 
 @keyframes jbSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* =========================================================
@@ -1685,7 +1650,7 @@ useHead({
   .jb-gateway-card {
     width: 100%;
     flex: 1;
-    height: 88px;
+    height: 118px;
   }
 
   .jb-card-transfer-info {
